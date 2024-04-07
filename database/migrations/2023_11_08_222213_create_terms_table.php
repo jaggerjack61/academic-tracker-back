@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('start');
             $table->string('end');
-            $table->string('school_id');
+            $table->boolean('is_active')->default(true);
             $table->timestamps();
         });
     }

@@ -14,9 +14,11 @@ return new class extends Migration
         Schema::create('courses', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('code')->nullable();
+            $table->string('code')->nullable()->unique();
             $table->string('description')->nullable();
-            $table->string('school_id');
+            $table->integer('grade_id');
+            $table->integer('subject_id');
+            $table->boolean('is_active')->default(true);
             $table->timestamps();
         });
     }

@@ -1,12 +1,12 @@
 @extends('layouts.base')
 
 @section('title')
-    Terms
+    Grades
 @endsection
 
 @section('content')
     <div class="card">
-        <h5 class="card-header">Terms</h5>
+        <h5 class="card-header">Grades</h5>
         <div class="table-responsive text-nowrap">
             <table class="table">
                 <thead>
@@ -14,26 +14,22 @@
                     New</a>
                 <tr>
                     <th>Name</th>
-                    <th>Start Date</th>
-                    <th>End Date</th>
                     <th>Status</th>
                     <th>Actions</th>
                 </tr>
                 </thead>
                 <tbody class="table-border-bottom-0">
-                @foreach($terms as $term)
+                @foreach($grades as $grade)
                     <tr>
-                        <td><i class="fab fa-angular fa-lg text-danger me-3"></i> <strong>{{$term->name}}</strong></td>
-                        <td>{{$term->start}}</td>
-                        <td>{{$term->end}}</td>
-                        <td>{{$term->is_active ? 'Active' : 'Inactive'}}</td>
+                        <td><i class="fab fa-angular fa-lg text-danger me-3"></i> <strong>{{$grade->name}}</strong></td>
+                        <td>{{$grade->is_active ? 'Active' : 'Inactive'}}</td>
                         <td>
                         <span>
-                            @if($term->is_active)
-                                <a href="{{route('toggle-term-status',$term->id)}}"
+                            @if($grade->is_active)
+                                <a href="{{route('toggle-grade-status',$grade->id)}}"
                                    class="btn btn-sm btn-danger text-white">Deactivate</a>
                             @else
-                                <a href="{{route('toggle-term-status',$term->id)}}"
+                                <a href="{{route('toggle-grade-status',$grade->id)}}"
                                    class="btn btn-sm btn-success text-white">Activate</a>
                             @endif
                         </span>
@@ -51,20 +47,16 @@
          aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
-                <form method="post" action="{{route('create-term')}}">
+                <form method="post" action="{{route('create-grade')}}">
                     @csrf
                     <div class="modal-header">
-                        <h5 class="modal-title" id="staticBackdropLabel">New Term</h5>
+                        <h5 class="modal-title" id="staticBackdropLabel">New Grade</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
+                            <input type="text" class="form-control my-2" placeholder="Grade Name" name="name"
+                                   required/>
 
-                        <input type="text" class="form-control my-2" placeholder="Term Name" name="name"
-                               required/>
-                        <label for="start">Start Date</label>
-                        <input type="date" class="form-control" required name="start" id="start"/>
-                        <label for="end">End Date</label>
-                        <input type="date" class="form-control" required name="end" id="end"/>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>

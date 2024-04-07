@@ -168,6 +168,12 @@
                                 <div data-i18n="Connections">Terms</div>
                             </a>
                         </li>
+
+                        <li class="menu-item {{Route::currentRouteName() == 'show-grades' ? 'active':''}}">
+                            <a href="{{route('show-grades')}}" class="menu-link">
+                                <div data-i18n="Connections">Grades</div>
+                            </a>
+                        </li>
                     </ul>
                 </li>
                 <li class="menu-item">
@@ -196,6 +202,7 @@
                 <!-- Content -->
 
                 <div class="container-xxl flex-grow-1 container-p-y">
+                    @include('layouts.includes.message')
 
                     @yield('content')
                     <!-- Content wrapper -->

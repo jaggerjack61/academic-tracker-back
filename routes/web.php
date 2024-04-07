@@ -1,11 +1,13 @@
 <?php
 
 use App\Http\Controllers\ClassController;
+use App\Http\Controllers\GradeController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MainController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\TeacherController;
+use App\Http\Controllers\TermController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -55,11 +57,26 @@ Route::middleware('auth')->group(function () {
             });
         });
 
-        Route::controller(SettingsController::class)->group(function () {
+        Route::controller(TermController::class)->group(function () {
             Route::prefix('settings')->group(function () {
-                Route::get('terms', 'showTerms')->name('show-terms');
+                Route::prefix('terms')->group(function () {
+                    Route::get('/', 'index')->name('show-terms');
+                    Route::post('/', 'create')->name('create-term');
+                    Route::get('status/{id}', 'toggle')->name('toggle-term-status');
+                });
             });
         });
+
+        Route::controller(GradeController::class)->group(function () {
+            Route::prefix('settings')->group(function () {
+                Route::prefix('grades')->group(function () {
+                    Route::get('/', 'index')->name('show-grades');
+                    Route::post('/', 'create')->name('create-grade');
+                    Route::get('status/{id}', 'toggle')->name('toggle-grade-status');
+                });
+            });
+        });
+
 
         Route::get('/home', [HomeController::class, 'index'])->name('home');
     });

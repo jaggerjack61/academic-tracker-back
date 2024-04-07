@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('description')->nullable();
             $table->enum('type', ['boolean','value']);
-            $table->string('school_id');
+            $table->boolean('is_active')->default(true);
             $table->timestamps();
         });
     }
