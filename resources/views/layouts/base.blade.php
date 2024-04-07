@@ -162,18 +162,29 @@
                                 <div data-i18n="Account">Teachers</div>
                             </a>
                         </li>
-
+                        <li class="menu-item {{Route::currentRouteName() == 'show-activity-types' ? 'active':''}}">
+                            <a href="{{route('show-activity-types')}}" class="menu-link">
+                                <div data-i18n="Connections">Activity Types</div>
+                            </a>
+                        </li>
+                        <li class="menu-item {{Route::currentRouteName() == 'show-grades' ? 'active':''}}">
+                            <a href="{{route('show-grades')}}" class="menu-link">
+                                <div data-i18n="Connections">Grades</div>
+                            </a>
+                        </li>
+                        <li class="menu-item {{Route::currentRouteName() == 'show-subjects' ? 'active':''}}">
+                            <a href="{{route('show-subjects')}}" class="menu-link">
+                                <div data-i18n="Connections">Subjects</div>
+                            </a>
+                        </li>
                         <li class="menu-item {{Route::currentRouteName() == 'show-terms' ? 'active':''}}">
                             <a href="{{route('show-terms')}}" class="menu-link">
                                 <div data-i18n="Connections">Terms</div>
                             </a>
                         </li>
 
-                        <li class="menu-item {{Route::currentRouteName() == 'show-grades' ? 'active':''}}">
-                            <a href="{{route('show-grades')}}" class="menu-link">
-                                <div data-i18n="Connections">Grades</div>
-                            </a>
-                        </li>
+
+
                     </ul>
                 </li>
                 <li class="menu-item">

@@ -34,6 +34,22 @@ class GradeController extends Controller
         }
     }
 
+    public function edit(Request $request)
+    {
+        $grade = Grade::find($request->id);
+        $validatedData = $request->validate([
+            'name' => 'required|string'
+        ]);
+
+        try {
+            $grade->update($validatedData);
+            return back()->with('success', 'Grade has been updated');
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            return back()->with('error', 'Failed to update grade');
+        }
+    }
+
     public function toggle($id): RedirectResponse
     {
         $grade = Grade::find($id);

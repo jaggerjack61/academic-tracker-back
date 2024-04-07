@@ -36,6 +36,24 @@ class TermController extends Controller
         }
     }
 
+    public function edit(Request $request)
+    {
+        $term = Term::find($request->id);
+        $validatedData = $request->validate([
+            'name' => 'required|string',
+            'start' => 'required|string',
+            'end' => 'required|string'
+        ]);
+
+        try {
+            $term->update($validatedData);
+            return back()->with('success', 'Term has been updated');
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            return back()->with('error', 'Failed to update term');
+        }
+    }
+
     public function toggle($id): RedirectResponse
     {
         $term = Term::find($id);
