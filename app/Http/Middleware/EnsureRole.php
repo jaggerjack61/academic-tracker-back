@@ -16,7 +16,7 @@ class EnsureRole
     public function handle(Request $request, Closure $next, string $role): Response
     {
         if($request->user()->role->name != $role) {
-            return response('Unauthorized',403);
+            return response('Your User Role is not authorized to view this page.',403);
         }
         return $next($request);
     }

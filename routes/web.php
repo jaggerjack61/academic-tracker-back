@@ -10,6 +10,7 @@ use App\Http\Controllers\StudentController;
 use App\Http\Controllers\SubjectController;
 use App\Http\Controllers\TeacherController;
 use App\Http\Controllers\TermController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -36,7 +37,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/', 'showDashboard')->name('show-dashboard');
     });
 
-    Route::middleware('role:superuser')->group(function () {
+    Route::middleware('role:admin')->group(function () {
 
         Route::controller(StudentController::class)->group(function () {
             Route::prefix('students')->group(function () {
@@ -93,6 +94,15 @@ Route::middleware('auth')->group(function () {
                     Route::post('/', 'create')->name('create-subject');
                     Route::patch('/', 'edit')->name('edit-subject');
                     Route::get('status/{id}', 'toggle')->name('toggle-subject-status');
+                });
+            });
+
+            Route::controller(UserController::class)->group(function () {
+                Route::group(['prefix' => 'users'], function () {
+                    Route::get('/', 'index')->name('show-users');
+                    Route::post('/', 'create')->name('create-user');
+                    Route::patch('/', 'edit')->name('edit-user');
+                    Route::get('status/{id}', 'toggle')->name('toggle-user-status');
                 });
             });
         });

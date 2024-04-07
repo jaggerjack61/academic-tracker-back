@@ -101,32 +101,5 @@ class RegisterController extends Controller
 
     }
 
-    public function createStudent($data)
-    {
-        $lastSpacePosition = strrpos($data['name'], ' ');
-        $firstName = substr($data['name'], 0, $lastSpacePosition);
-        $lastName = substr($data['name'], $lastSpacePosition + 1);
 
-        return Student::create([
-            'first_name' => $firstName,
-            'last_name' => $lastName,
-            'dob' => $data['dob'],
-            'sex' => $data['sex'],
-        ]);
-    }
-
-    public function createTeacher($data)
-    {
-        $lastSpacePosition = strrpos($data['name'], ' ');
-        $firstName = substr($data['name'], 0, $lastSpacePosition);
-        $lastName = substr($data['name'], $lastSpacePosition + 1);
-
-        return Teacher::create([
-            'first_name' => $firstName,
-            'last_name' => $lastName,
-            'dob' => $data['dob'],
-            'sex' => $data['sex'],
-            'id_number' => $data['id_number']
-        ]);
-    }
 }

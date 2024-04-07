@@ -3,8 +3,10 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Helpers\AbstractModel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -48,5 +50,19 @@ class User extends Authenticatable
     public function role():belongsTo
     {
         return $this->belongsTo(Role::class);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function userable()
+    {
+        return match ($this->role->name) {
+            'parent' => $this->belongsTo(StudentParent::class, 'user_id', 'id'),
+            'student' => $this->belongsTo(Student::class, 'id', 'user_id'),
+            'teacher' => $this->belongsTo(Teacher::class, 'id', 'user_id'),
+            'admin' => $this->belongsTo(Admin::class, 'id', 'user_id'),
+            default => throw new \Exception('Invalid role'),
+        };
     }
 }

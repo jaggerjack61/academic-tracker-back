@@ -182,6 +182,11 @@
                                 <div data-i18n="Connections">Terms</div>
                             </a>
                         </li>
+                        <li class="menu-item {{Route::currentRouteName() == 'show-users' ? 'active':''}}">
+                            <a href="{{route('show-users')}}" class="menu-link">
+                                <div data-i18n="Connections">Users</div>
+                            </a>
+                        </li>
 
 
 

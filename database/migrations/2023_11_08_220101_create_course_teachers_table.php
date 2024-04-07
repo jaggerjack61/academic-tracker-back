@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('course_id');
             $table->string('teacher_id');
+            $table->boolean('is_active')->default(true);
             $table->timestamps();
         });
     }
