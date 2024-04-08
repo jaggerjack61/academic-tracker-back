@@ -45,7 +45,7 @@
                                    class="btn btn-sm btn-success text-white">Activate</a>
                             @endif
                             <button type="button" class="btn btn-sm btn-primary text-white" data-bs-toggle="modal" data-bs-target="#editUserModal"
-                                    onclick="editUser({{ $user->id }}, '{{ $user->name }}','{{ $user->start }}','{{ $user->end }}')">Edit</button>
+                                    onclick="editUser({{ $user->id }}, '{{ $user->name }}','{{$user->email}}', '{{$user->userable->phone_number}}', '{{$user->userable->id_number}}', '{{$user->userable->sex}}','{{$user->userable->dob}}')">Edit</button>
                         </span>
                         </td>
                     </tr>
@@ -113,12 +113,21 @@
                     </div>
                     <div class="modal-body">
                         <input type="hidden" name="id" value="" id="edit-user-id">
-                        <input type="text" class="form-control my-2" placeholder="User Name" name="name" id="edit-user-name"
+                        <input type="text" class="form-control my-2" placeholder="Full Name" name="name" id="edit-user-name"
                                required/>
-                        <label for="start">Start Date</label>
-                        <input type="date" class="form-control" required name="start" id="edit-user-start"/>
-                        <label for="end">End Date</label>
-                        <input type="date" class="form-control" required name="end" id="edit-user-end"/>
+                        <input type="text" class="form-control my-2" placeholder="Email" name="email" id="edit-user-email"
+                               required/>
+                        <input type="text" class="form-control my-2" placeholder="Phone Number" name="phone_number" id="edit-user-phone_number"
+                               required/>
+                        <input type="text" class="form-control my-2" placeholder="Identification Number" name="id_number" id="edit-user-id_number"
+                               required/>
+                        <select name="sex" class="form-control my-2" required id="edit-user-sex">
+                            <option value="">Select sex</option>
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
+                        </select>
+                        <label for="dob">Date of Birth</label>
+                        <input type="date" class="form-control my-2" required name="dob" id="edit-user-dob"/>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -128,17 +137,19 @@
             </div>
         </div>
     </div>
-
     <!-- Button to trigger edit modal -->
 
 
     <!-- Script to populate edit modal with user data -->
     <script>
-        function editUser(id, name, start, end) {
+        function editUser(id, name, email, phone_number, id_number, sex, dob) {
             document.getElementById('edit-user-id').value = id;
             document.getElementById('edit-user-name').value = name;
-            document.getElementById('edit-user-start').value = start;
-            document.getElementById('edit-user-end').value = end;
+            document.getElementById('edit-user-email').value = email;
+            document.getElementById('edit-user-phone_number').value = phone_number;
+            document.getElementById('edit-user-id_number').value = id_number;
+            document.getElementById('edit-user-sex').value = sex;
+            document.getElementById('edit-user-dob').value = dob;
         }
     </script>
 

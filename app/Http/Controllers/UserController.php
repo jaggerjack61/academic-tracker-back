@@ -72,33 +72,47 @@ class UserController extends Controller
 
     public function edit(Request $request)
     {
-        $user = User::find($request->id);
         $validatedData = $request->validate([
+            'id' => 'required|integer',
             'name' => 'required|string',
-            'start' => 'required|string',
-            'end' => 'required|string'
+            'email' => 'required|email',
+            'dob' => 'required|date',
+            'id_number' => 'required|string',
+            'phone_number' => 'nullable|string',
+            'sex' => 'required|string',
         ]);
 
         try {
-            $user->update($validatedData);
+            $user = User::find($validatedData['id']);
+            $user->update([
+                'name' => $validatedData['name'],
+                'email' => $validatedData['email'],
+                'password' => Hash::make($validatedData['email'])
+            ]);
+            $name = $this->splitName($validatedData['name']);
+            $validatedData['first_name'] = $name[0];
+            $validatedData['last_name'] = $name[1];
+            $user->userable->update($validatedData);
             return back()->with('success', 'User has been updated');
         } catch (\Exception $e) {
+            // Log the error message for debugging
             Log::error($e->getMessage());
             return back()->with('error', 'Failed to update user');
         }
     }
 
+
     public function toggle($id): RedirectResponse
     {
         $user = User::find($id);
         try {
-            if ($user->is_active) {
-                $user->is_active = false;
-                $user->save();
+            if ($user->userable->is_active) {
+                $user->userable->is_active = false;
+                $user->userable->save();
                 return back()->with('success', 'User has been deactivated');
             } else {
-                $user->is_active = true;
-                $user->save();
+                $user->userable->is_active = true;
+                $user->userable->save();
                 return back()->with('success', 'User has been activated');
             }
 
