@@ -161,7 +161,6 @@ class UserController extends Controller
             'phone_number' => $data['phone_number'],
             'user_id' => $data['user_id']
         ]);
-        dd('here');
     }
 
     public function createAdmin($data)

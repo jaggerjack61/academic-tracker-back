@@ -58,7 +58,7 @@ class User extends Authenticatable
     public function userable()
     {
         return match ($this->role->name) {
-            'parent' => $this->belongsTo(StudentParent::class, 'user_id', 'id'),
+            'parent' => $this->belongsTo(StudentParent::class, 'id', 'user_id'),
             'student' => $this->belongsTo(Student::class, 'id', 'user_id'),
             'teacher' => $this->belongsTo(Teacher::class, 'id', 'user_id'),
             'admin' => $this->belongsTo(Admin::class, 'id', 'user_id'),
