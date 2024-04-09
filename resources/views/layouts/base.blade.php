@@ -141,6 +141,18 @@
                         <div data-i18n="Analytics">Students</div>
                     </a>
                 </li>
+                <li class="menu-item {{Route::currentRouteName() == 'show-teachers' || Route::currentRouteName() == 'view-teacher' ? 'active':''}}">
+                    <a href="{{route('show-teachers')}}" class="menu-link">
+                        <i class="menu-icon tf-icons bx bxs-user-voice"></i>
+                        <div data-i18n="Account">Parents</div>
+                    </a>
+                </li>
+                <li class="menu-item {{Route::currentRouteName() == 'show-teachers' || Route::currentRouteName() == 'view-teacher' ? 'active':''}}">
+                    <a href="{{route('show-teachers')}}" class="menu-link">
+                        <i class="menu-icon tf-icons bx bxs-user-rectangle"></i>
+                        <div data-i18n="Account">Teachers</div>
+                    </a>
+                </li>
                 <li class="menu-item {{Route::currentRouteName() == 'show-classes' ? 'active':''}}">
                     <a href="{{route('show-classes')}}" class="menu-link">
                         <i class="menu-icon tf-icons bx bx-book"></i>
@@ -157,11 +169,7 @@
                         <div data-i18n="Account Settings">Settings</div>
                     </a>
                     <ul class="menu-sub">
-                        <li class="menu-item {{Route::currentRouteName() == 'show-teachers' || Route::currentRouteName() == 'view-teacher' ? 'active':''}}">
-                            <a href="{{route('show-teachers')}}" class="menu-link">
-                                <div data-i18n="Account">Teachers</div>
-                            </a>
-                        </li>
+
                         <li class="menu-item {{Route::currentRouteName() == 'show-activity-types' ? 'active':''}}">
                             <a href="{{route('show-activity-types')}}" class="menu-link">
                                 <div data-i18n="Connections">Activity Types</div>

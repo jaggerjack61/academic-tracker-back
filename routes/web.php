@@ -37,6 +37,13 @@ Route::middleware('auth')->group(function () {
         Route::get('/', 'showDashboard')->name('show-dashboard');
     });
 
+    Route::controller(ClassController::class)->group(function () {
+        Route::prefix('classes')->group(function () {
+            Route::get('/', 'showClasses')->name('show-classes');
+            Route::post('/', 'create')->name('create-class');
+        });
+    });
+
     Route::middleware('role:admin')->group(function () {
 
         Route::controller(StudentController::class)->group(function () {
@@ -47,11 +54,7 @@ Route::middleware('auth')->group(function () {
             });
         });
 
-        Route::controller(ClassController::class)->group(function () {
-            Route::prefix('classes')->group(function () {
-                Route::get('/', 'showClasses')->name('show-classes');
-            });
-        });
+
 
         Route::controller(TeacherController::class)->group(function () {
             Route::prefix('teachers')->group(function () {
