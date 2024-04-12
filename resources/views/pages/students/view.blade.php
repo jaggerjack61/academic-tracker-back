@@ -14,16 +14,17 @@
     <div class="col-3">
         <div class="card">
             <div class="row">
-                <div class="col-8">
+                <div class="col-md-9">
                     <h5 class="card-header">{{$student->name}}</h5>
                 </div>
-                <div class="col-4">
-                    <a class="btn btn-sm btn-primary m-2 mt-4 text-white"><i class="bx bx-pencil"></i>Edit</a>
+                <div class="col-md-3">
+                    <a class="btn btn-sm btn-primary m-1 mt-4 text-white"><i class="bx bxs-pencil"></i></a>
                 </div>
             </div>
 
             <div class="card-body">
                 <p><strong class="mx-2">Email:</strong> {{$student->user->email}}</p>
+                <p><strong class="mx-2">ID Number:</strong> {{$student->id_number}}</p>
                 <p><strong class="mx-2">Phone:</strong> {{$student->phone_number}}</p>
                 <p><strong class="mx-2">DOB:</strong> {{$student->dob}}</p>
                 <p><strong class="mx-2">Sex:</strong> {{$student->sex}}</p>
@@ -54,11 +55,11 @@
                                 <td>{{$class->course->name}}</td>
                                 <td>{{$class->course->grade->name}}</td>
                                 <td>{{$class->course->subject->name}}</td>
-                                <td>{{$class->course->is_active}}</td>
+                                <td>{{$class->course->is_active?'Enrolled':'Un-enrolled'}}</td>
                                 <td>
                         <span>
                             <a class="btn btn-sm btn-secondary text-white" href="{{route('view-activities',['class' => $class->id, 'student' => $student->id])}}">View</a>
-                            <a class="btn btn-sm btn-danger text-white" href="{{route('unenroll-student',['class' => $class->course_id, 'student' => $student->id])}}">Dis-enroll</a>
+                            <a class="btn btn-sm btn-danger text-white" href="{{route('unenroll-student',['class' => $class->course_id, 'student' => $student->id])}}">Un-enroll</a>
                         </span>
                                 </td>
                             </tr>

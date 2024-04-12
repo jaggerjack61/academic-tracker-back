@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('activity');
             $table->string('note')->nullable();
             $table->string('term_id');
-            $table->float('score');
+            $table->float('score')->nullable();
             $table->boolean('is_active')->default(true);
             $table->timestamps();
         });
