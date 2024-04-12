@@ -28,4 +28,27 @@ class Course extends Model
         return $this->hasOne(CourseTeacher::class, 'course_id', 'id')->where('is_active', true);
     }
 
+    public function students()
+    {
+        return $this->hasMany(CourseStudent::class, 'course_id', 'id')->where('is_active', true);
+    }
+
+    public function search($query, $search)
+    {
+        return $query->where('name', 'LIKE', "%{$search}%")
+            ->orWhereHas('teacher', function ($q) use ($search) {
+                $q->where('name', 'LIKE', "%{$search}%")
+                    ->orWhereHas('teacher', function($query) use($search){
+                        $query->where('first_name', 'LIKE', "%{$search}%")->orWhere('last_name', 'LIKE', "%{$search}%");
+                    });
+            })
+            ->orWhereHas('subject', function ($q) use ($search) {
+                $q->where('name', 'LIKE', "%{$search}%");
+            })
+            ->orWhereHas('grade', function ($q) use ($search) {
+                $q->where('name', 'LIKE', "%{$search}%");
+            });
+    }
+
+
 }

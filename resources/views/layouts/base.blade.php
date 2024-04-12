@@ -141,7 +141,7 @@
                         <div data-i18n="Analytics">Students</div>
                     </a>
                 </li>
-                <li class="menu-item {{Route::currentRouteName() == 'show-teachers' || Route::currentRouteName() == 'view-teacher' ? 'active':''}}">
+                <li class="menu-item {{Route::currentRouteName() == 'show-parents' || Route::currentRouteName() == 'view-parent' ? 'active':''}}">
                     <a href="{{route('show-teachers')}}" class="menu-link">
                         <i class="menu-icon tf-icons bx bxs-user-voice"></i>
                         <div data-i18n="Account">Parents</div>

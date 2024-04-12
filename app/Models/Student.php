@@ -15,4 +15,24 @@ class Student extends Model
         return $this->first_name . ' ' . $this->last_name;
     }
 
+    public function user()
+    {
+        return $this->hasOne(User::class, 'id', 'user_id');
+    }
+
+    public function courses()
+    {
+        return $this->hasMany(CourseStudent::class, 'student_id', 'id')->where('is_active', true);
+    }
+
+    public function search($query, $search)
+    {
+        return $query->where('first_name', 'LIKE' , '%'.$search.'%')
+            ->orWhere('last_name', 'LIKE' , '%'.$search.'%')
+            ->orWhere('phone_number', 'LIKE' , '%'.$search.'%')
+            ->orWhere('id_number', 'LIKE' , '%'.$search.'%')
+            ->orWhere('dob', 'LIKE' , '%'.$search.'%')
+            ->orWhere('sex', 'LIKE' , '%'.$search.'%');
+    }
+
 }

@@ -5,48 +5,9 @@
 @endsection
 
 @section('content')
-    <div class="card">
-        <h5 class="card-header">Classes</h5>
-        <div class="table-responsive text-nowrap">
-            <table class="table">
-                <thead>
-                <a class="btn btn-sm btn-info mx-3 text-white" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Add
-                    New</a>
-                <tr>
-                    <th>Name</th>
-                    <th>Grade</th>
-                    <th>Subject</th>
-                    <th>Teacher</th>
-                    <th>Students</th>
-                    <th>Status</th>
-                    <th>Actions</th>
-                </tr>
-                </thead>
-                <tbody class="table-border-bottom-0">
-                @foreach($classes as $class)
-                    <tr>
-                        <td><i class="fab fa-angular fa-lg text-danger me-3"></i> <strong>{{$class->name}}</strong>
-                        </td>
-                        <td>{{$class->grade->name}}</td>
-                        <td>
-                            {{$class->subject->name}}
-                        </td>
-                        <td>{{optional($class->teacher)->teacherName()}}</td>
-                        <td>25</td>
-                        <td><span class="badge bg-label-primary me-1">{{$class->is_active ? 'Active' : 'Inactive'}}</span></td>
-                        <td>
-                        <span>
-                            <a class="btn btn-sm btn-primary text-white">Edit</a>
-                            <a class="btn btn-sm btn-secondary text-white">View</a>
-                            <a class="btn btn-sm btn-danger text-white">Deactivate</a>
-                        </span>
-                        </td>
-                    </tr>
-                @endforeach
-                </tbody>
-            </table>
-        </div>
-    </div>
+
+
+    <livewire:class-table/>
 
 
 
@@ -96,5 +57,6 @@
             </div>
         </div>
     </div>
+
 
 @endsection

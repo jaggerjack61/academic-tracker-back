@@ -49,7 +49,9 @@ Route::middleware('auth')->group(function () {
         Route::controller(StudentController::class)->group(function () {
             Route::prefix('students')->group(function () {
                 Route::get('/', 'showStudents')->name('show-students');
-                Route::get('view', 'view')->name('view-student');
+                Route::get('view/{student}', 'view')->name('view-student');
+                Route::post('enroll', 'enroll')->name('enroll-student');
+                Route::get('unroll/{student}/{class}', 'unenroll')->name('unenroll-student');
                 Route::get('activities', 'viewActivities')->name('view-activities');
             });
         });
