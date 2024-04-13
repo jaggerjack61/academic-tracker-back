@@ -18,9 +18,8 @@ class UserController extends Controller
 {
     public function index()
     {
-        $users = User::all();
-        $roles = Role::all();
-        return view('pages.settings.users', compact('users','roles'));
+
+        return view('pages.settings.users');
     }
 
     public function create(Request $request)

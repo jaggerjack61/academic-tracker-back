@@ -55,9 +55,9 @@ class User extends Authenticatable
     /**
      * @throws \Exception
      */
-    public function userable()
+    public function userable($role = null)
     {
-        return match ($this->role->name) {
+        return match ($this->role->name??$role) {
             'parent' => $this->belongsTo(StudentParent::class, 'id', 'user_id'),
             'student' => $this->belongsTo(Student::class, 'id', 'user_id'),
             'teacher' => $this->belongsTo(Teacher::class, 'id', 'user_id'),
@@ -65,4 +65,58 @@ class User extends Authenticatable
             default => throw new \Exception('Invalid role'),
         };
     }
+
+    public function parent()
+    {
+        return $this->userable('parent');
+    }
+
+    public function student()
+    {
+        return $this->userable('student');
+    }
+
+    public function teacher()
+    {
+        return $this->userable('teacher');
+    }
+
+    public function admin()
+    {
+        return $this->userable('admin');
+    }
+    public function search($query, $search)
+    {
+
+        return $query->where('name', 'LIKE', "%{$search}%")
+            ->orWhere('email', 'LIKE', "%{$search}%")
+            ->orWhereHas('student', function ($q) use ($search) {
+                $q->where('id_number', 'LIKE', "%{$search}%")
+                    ->orWhere('phone_number', 'LIKE', "%{$search}%")
+                    ->orWhere('dob', 'LIKE', "%{$search}%")
+                    ->orWhere('sex', 'LIKE', "%{$search}%");
+            })
+            ->orWhereHas('parent', function ($q) use ($search) {
+                $q->where('id_number', 'LIKE', "%{$search}%")
+                    ->orWhere('phone_number', 'LIKE', "%{$search}%")
+                    ->orWhere('dob', 'LIKE', "%{$search}%")
+                    ->orWhere('sex', 'LIKE', "%{$search}%");
+            })
+            ->orWhereHas('teacher', function ($q) use ($search) {
+                $q->where('id_number', 'LIKE', "%{$search}%")
+                    ->orWhere('phone_number', 'LIKE', "%{$search}%")
+                    ->orWhere('dob', 'LIKE', "%{$search}%")
+                    ->orWhere('sex', 'LIKE', "%{$search}%");
+            })
+            ->orWhereHas('admin', function ($q) use ($search) {
+                $q->where('id_number', 'LIKE', "%{$search}%")
+                    ->orWhere('phone_number', 'LIKE', "%{$search}%")
+                    ->orWhere('dob', 'LIKE', "%{$search}%")
+                    ->orWhere('sex', 'LIKE', "%{$search}%");
+            })
+            ->orWhereHas('role', function ($q) use ($search) {
+                $q->where('name', 'LIKE', "%{$search}%");
+            });
+    }
+
 }
