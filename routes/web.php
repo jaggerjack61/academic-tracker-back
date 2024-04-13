@@ -40,21 +40,28 @@ Route::middleware('auth')->group(function () {
     Route::controller(ClassController::class)->group(function () {
         Route::prefix('classes')->group(function () {
             Route::get('/', 'showClasses')->name('show-classes');
+            Route::get('view/{course}', 'view')->name('view-class');
             Route::post('/', 'create')->name('create-class');
+            Route::patch('/', 'edit')->name('edit-class');
+            Route::get('status/{course}', 'toggle')->name('toggle-class-status');
+            Route::post('/enroll-class', 'enroll')->name('enroll-class');
         });
     });
 
+    Route::controller(StudentController::class)->group(function () {
+        Route::prefix('students')->group(function () {
+            Route::get('/', 'showStudents')->name('show-students');
+            Route::get('view/{student}', 'view')->name('view-student');
+            Route::post('enroll', 'enroll')->name('enroll-student');
+            Route::get('unroll/{student}/{class}', 'unenroll')->name('unenroll-student');
+            Route::get('activities', 'viewActivities')->name('view-activities');
+        });
+    });
+
+
     Route::middleware('role:admin')->group(function () {
 
-        Route::controller(StudentController::class)->group(function () {
-            Route::prefix('students')->group(function () {
-                Route::get('/', 'showStudents')->name('show-students');
-                Route::get('view/{student}', 'view')->name('view-student');
-                Route::post('enroll', 'enroll')->name('enroll-student');
-                Route::get('unroll/{student}/{class}', 'unenroll')->name('unenroll-student');
-                Route::get('activities', 'viewActivities')->name('view-activities');
-            });
-        });
+
 
 
 

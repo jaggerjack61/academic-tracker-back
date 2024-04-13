@@ -18,5 +18,15 @@ class CourseTeacher extends Model
     {
         return $this->teacher->name;
     }
+
+    public function teacherID()
+    {
+        return $this->teacher->id;
+    }
+
+    public function getNameAttribute()
+    {
+        return $this->teacher->name;
+    }
 }
 

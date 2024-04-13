@@ -54,16 +54,11 @@ class SubjectController extends Controller
     {
         $subject = Subject::find($id);
         try {
-            if($subject->is_active){
-                $subject->is_active = false;
-                $subject->save();
-                return back()->with('success', 'Subject has been deactivated');
-            }
-            else{
-                $subject->is_active = true;
-                $subject->save();
-                return back()->with('success', 'Subject has been activated');
-            }
+
+            $subject->is_active = !$subject->is_active;
+            $subject->save();
+            return back()->with('success', 'Subject status has been updated');
+
 
         } catch (\Exception $e) {
             return back()->with('error', $e->getMessage());

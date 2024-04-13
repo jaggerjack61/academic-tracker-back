@@ -2,27 +2,28 @@
     <div class="card">
         <h5 class="card-header">Classes</h5>
         <div class="table-responsive text-nowrap">
-           <div class="row">
-               <div class="col-md-1">
-               <a class="btn btn-sm btn-info m-2 text-white" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Add
-                New</a>
-               </div>
-               <div class="col-md-2">
-                       <select class="form-select mb-5" wire:model.live="paginate">
-                           <option value="">Results per page</option>
-                           <option value="25">25</option>
-                           <option value="50">50</option>
-                           <option value="100">100</option>
-                           <option value="500">500</option>
-                           <option value="1000">1000</option>
-                       </select>
+            <div class="row">
+                <div class="col-md-1">
+                    <a class="btn btn-sm btn-info m-2 text-white" data-bs-toggle="modal"
+                       data-bs-target="#staticBackdrop">Add
+                        New</a>
+                </div>
+                <div class="col-md-2">
+                    <select class="form-select mb-5" wire:model.live="paginate">
+                        <option value="">Results per page</option>
+                        <option value="25">25</option>
+                        <option value="50">50</option>
+                        <option value="100">100</option>
+                        <option value="500">500</option>
+                        <option value="1000">1000</option>
+                    </select>
 
-               </div>
-               <div class="col-md-2">
-                   <input wire:model.live="search" type="text" class="form-control mb-5 me-auto" placeholder="Search" />
-               </div>
+                </div>
+                <div class="col-md-2">
+                    <input wire:model.live="search" type="text" class="form-control mb-5 me-auto" placeholder="Search"/>
+                </div>
             </div>
-               <table class="table">
+            <table class="table">
                 <thead>
 
                 <tr>
@@ -46,12 +47,22 @@
                         </td>
                         <td>{{optional($class->teacher)->teacherName()}}</td>
                         <td>{{$class->students->count()}}</td>
-                        <td><span class="badge bg-label-primary me-1">{{$class->is_active ? 'Active' : 'Inactive'}}</span></td>
+                        <td><span
+                                class="badge bg-label-primary me-1">{{$class->is_active ? 'Active' : 'Inactive'}}</span>
+                        </td>
                         <td>
                         <span>
-                            <a class="btn btn-sm btn-primary text-white">Edit</a>
-                            <a class="btn btn-sm btn-secondary text-white">View</a>
-                            <a class="btn btn-sm btn-danger text-white">Deactivate</a>
+                            <a class="btn btn-sm btn-primary text-white"
+                               onclick="editClass(id='{{$class->id}}', name='{{$class->name}}', teacher='{{optional($class->teacher)->teacherID()}}', grade='{{$class->grade->id}}', subject='{{$class->subject->id}}')"
+                               data-bs-toggle="modal" data-bs-target="#editModal">Edit</a>
+                            <a href="{{route('view-class',['course' => $class->id])}}" class="btn btn-sm btn-secondary text-white">View</a>
+                             @if($class->is_active)
+                                <a href="{{route('toggle-class-status',['course' => $class->id])}}"
+                                   class="btn btn-sm btn-danger text-white">Deactivate</a>
+                            @else
+                                <a href="{{route('toggle-class-status',['course' => $class->id])}}"
+                                   class="btn btn-sm btn-success text-white">Activate</a>
+                            @endif
                         </span>
                         </td>
                     </tr>

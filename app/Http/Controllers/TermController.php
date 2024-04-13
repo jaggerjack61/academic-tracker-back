@@ -58,16 +58,10 @@ class TermController extends Controller
     {
         $term = Term::find($id);
         try {
-            if($term->is_active){
-                $term->is_active = false;
+                $term->is_active = !$term->is_active;
                 $term->save();
-                return back()->with('success', 'Term has been deactivated');
-            }
-            else{
-                $term->is_active = true;
-                $term->save();
-                return back()->with('success', 'Term has been activated');
-            }
+                return back()->with('success', 'Term status has been updated');
+
 
         } catch (\Exception $e) {
             return back()->with('error', $e->getMessage());

@@ -67,6 +67,8 @@
         </div>
     </div>
 
+    <div class="m-2 p-2 bg-white rounded col-3"> {{$users->count()}} Users</div>
+
 
 
     <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"

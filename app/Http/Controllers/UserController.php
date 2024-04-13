@@ -7,6 +7,7 @@ use App\Models\Role;
 use App\Models\Student;
 use App\Models\StudentParent;
 use App\Models\Teacher;
+
 //use App\Models\Parent;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
@@ -47,17 +48,13 @@ class UserController extends Controller
             $role = Role::find($validatedData['role_id']);
             if ($role->name == 'student') {
                 $this->createStudent($validatedData);
-            }
-            elseif ($role->name == 'teacher') {
+            } elseif ($role->name == 'teacher') {
                 $this->createTeacher($validatedData);
-            }
-            elseif($role->name == 'parent') {
+            } elseif ($role->name == 'parent') {
                 $this->createParent($validatedData);
-            }
-            elseif($role->name == 'admin') {
+            } elseif ($role->name == 'admin') {
                 $this->createAdmin($validatedData);
-            }
-            else{
+            } else {
                 return back()->with('error', 'Invalid role');
             }
 
@@ -88,6 +85,7 @@ class UserController extends Controller
                 'email' => $validatedData['email'],
                 'password' => Hash::make($validatedData['email'])
             ]);
+            unset($validatedData['id']);
             $name = $this->splitName($validatedData['name']);
             $validatedData['first_name'] = $name[0];
             $validatedData['last_name'] = $name[1];
@@ -103,17 +101,13 @@ class UserController extends Controller
 
     public function toggle($id): RedirectResponse
     {
-        $user = User::find($id);
+
         try {
-            if ($user->userable->is_active) {
-                $user->userable->is_active = false;
-                $user->userable->save();
-                return back()->with('success', 'User has been deactivated');
-            } else {
-                $user->userable->is_active = true;
-                $user->userable->save();
-                return back()->with('success', 'User has been activated');
-            }
+            $user = User::find($id);
+            $user->userable->is_active = !$user->userable->is_active;
+            $user->userable->save();
+            return back()->with('success', 'User status has been updated');
+
 
         } catch (\Exception $e) {
             return back()->with('error', $e->getMessage());

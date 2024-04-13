@@ -54,16 +54,10 @@ class GradeController extends Controller
     {
         $grade = Grade::find($id);
         try {
-            if($grade->is_active){
-                $grade->is_active = false;
-                $grade->save();
-                return back()->with('success', 'Grade has been deactivated');
-            }
-            else{
-                $grade->is_active = true;
-                $grade->save();
-                return back()->with('success', 'Grade has been activated');
-            }
+            $grade->is_active = !$grade->is_active;
+            $grade->save();
+            return back()->with('success', 'Grade status has been updated');
+
 
         } catch (\Exception $e) {
             return back()->with('error', $e->getMessage());
