@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ActivityType;
 use App\Models\Course;
 use App\Models\CourseStudent;
 use App\Models\CourseTeacher;
@@ -148,31 +149,67 @@ class ClassController extends Controller
 
     public function copy(Request $request)
     {
+        $currentEnrolledClass = Course::find($request->currentCourse);
         try{
-            $currentEnrolledClass = Course::find($request->currentCourse);
-            foreach ($request->courses as $course) {
-                $class = Course::find($course);
-                foreach ($currentEnrolledClass->students as $student) {
-                    $enrolled = $this->studentController->validateEnrollment($student->student_id, $class->id);
-                    if ($enrolled) {
-                        if (!$enrolled->is_active) {
-                            $enrolled->is_active = true;
-                            $enrolled->save();
-                        }
-                    } else {
-                        $courseStudentInstance = new CourseStudent();
-                        $courseStudentInstance->student_id = $student->student_id;
-                        $courseStudentInstance->course_id = $class->id;
-                        $courseStudentInstance->save();
-                    }
-                }
-            }
+
+            $this->iterateEnrolment($request, $currentEnrolledClass);
         } catch (\Exception $e) {
             return back()->with('error',$e->getMessage());
         }
 
 
         return back()->with('success', 'Students have been enrolled');
+    }
+
+    public function move(Request $request)
+    {
+        $currentEnrolledClass = Course::find($request->currentCourse);
+        try{
+
+            $this->iterateEnrolment($request, $currentEnrolledClass);
+            $currentEnrolledClass->students()->update(['is_active' => false]);
+//            $currentEnrolledClass->save();
+        } catch (\Exception $e) {
+            return back()->with('error',$e->getMessage());
+        }
+
+
+        return back()->with('success', 'Students have been enrolled');
+    }
+
+    /**
+     * @param Request $request
+     * @param $currentEnrolledClass
+     * @return void
+     */
+    public function iterateEnrolment(Request $request, $currentEnrolledClass): void
+    {
+        foreach ($request->courses as $course) {
+            $class = Course::find($course);
+            foreach ($currentEnrolledClass->students as $student) {
+                $enrolled = $this->studentController->validateEnrollment($student->student_id, $class->id);
+                if ($enrolled) {
+                    if (!$enrolled->is_active) {
+                        $enrolled->is_active = true;
+                        $enrolled->save();
+                    }
+                } else {
+                    $courseStudentInstance = new CourseStudent();
+                    $courseStudentInstance->student_id = $student->student_id;
+                    $courseStudentInstance->course_id = $class->id;
+                    $courseStudentInstance->save();
+                }
+            }
+        }
+    }
+
+    public function viewActivities(Course $course)
+    {
+        return view('pages.classes.activities', [
+            'class' => $course,
+            'activityTypes' => ActivityType::where('is_active', true)->get(),
+            'first' => ActivityType::where('is_active', true)->first()
+        ]);
     }
 }
 

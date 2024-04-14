@@ -4,7 +4,7 @@
         <div class="table-responsive text-nowrap">
             <div class="row">
                 <div class="col-md-1">
-                    <a class="btn btn-sm btn-info m-2 text-white" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Add
+                    <a href="{{route('show-users')}}"  class="btn btn-sm btn-info m-2 text-white" >Add
                         New</a>
                 </div>
                 <div class="col-md-2">
@@ -49,9 +49,15 @@
                         <td><span class="badge bg-label-primary me-1">{{$student->is_active ? 'Active' : 'Inactive'}}</span></td>
                         <td>
                         <span>
-                            <a class="btn btn-sm btn-primary text-white">Edit</a>
+                            <a href="{{route('show-users')}}"  class="btn btn-sm btn-primary text-white">Edit</a>
                             <a href="{{route('view-student', ['student' => $student->id])}}" class="btn btn-sm btn-secondary text-white">View</a>
-                            <a class="btn btn-sm btn-danger text-white">Deactivate</a>
+                             @if($student->is_active)
+                                <a href="{{route('toggle-user-status',$student->user_id)}}"
+                                   class="btn btn-sm btn-danger text-white">Deactivate</a>
+                            @else
+                                <a href="{{route('toggle-user-status',$student->user_id)}}"
+                                   class="btn btn-sm btn-success text-white">Activate</a>
+                            @endif
                         </span>
                         </td>
                     </tr>

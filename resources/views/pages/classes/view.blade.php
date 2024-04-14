@@ -36,11 +36,21 @@
             <div class="card">
                 <h5 class="card-header">Students</h5>
                 <div class="table-responsive text-nowrap">
-                    <a class="btn btn-sm btn-info mx-3 text-white" data-bs-toggle="modal"
-                       data-bs-target="#staticBackdrop">Add
-                        New</a>
-                    <a class="btn btn-sm btn-success mx-3 text-white" data-bs-toggle="modal"
-                       data-bs-target="#staticBackdrop1">Copy Students</a>
+                    <div class="row">
+                        <div class="col-9">
+                            <a class="btn btn-sm btn-info ms-3 me-1 text-white" data-bs-toggle="modal"
+                               data-bs-target="#staticBackdrop">Add
+                                New</a>
+                            <a class="btn btn-sm btn-success mx-1 text-white" data-bs-toggle="modal"
+                               data-bs-target="#staticBackdrop1">Copy Students</a>
+                            <a class="btn btn-sm btn-warning mx-1 text-white" data-bs-toggle="modal"
+                               data-bs-target="#staticBackdrop2">Move Students</a>
+                        </div>
+                        <div class="col-3">
+                            <a href="{{route('view-class-activities',['course' => $class->id])}}"
+                               data-bs-target="#staticBackdrop2">Activities</a>
+                        </div>
+                    </div>
                     <table class="table">
                         <thead>
 
@@ -63,7 +73,7 @@
                                 <td>
                         <span>
                             <a class="btn btn-sm btn-secondary text-white"
-                               href="{{route('view-activities',['class' => $class->id, 'student' => $student->student_id])}}">View</a>
+                               href="{{route('view-student-activities',['class' => $class->id, 'student' => $student->student_id])}}">View</a>
                             <a class="btn btn-sm btn-danger text-white"
                                href="{{route('unenroll-student',['class' => $class->id, 'student' => $student->student_id])}}">Un-enroll</a>
                         </span>
@@ -108,6 +118,36 @@
             </div>
         </div>
     </div>
+
+    <div class="modal fade" id="staticBackdrop2" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+         aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form action="{{route('move-class')}}" method="post">
+                    @csrf
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="staticBackdropLabel">Move Students to Other Classes</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <input type="hidden" value="{{$class->id}}" name="currentCourse">
+                        <label for="class">Students</label>
+                        <select style="width: 100%" required name="courses[]" multiple="multiple" id="select222">
+                            @foreach($classes as $course)
+                                <option
+                                    value="{{$course->id}}">{{$course->name}} {{$course->grade->name}} {{$course->subject->name}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
 
     <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
          aria-labelledby="staticBackdropLabel" aria-hidden="true">
@@ -183,6 +223,12 @@
 
         $('#select221').select2({
             dropdownParent: $('#staticBackdrop1'),
+            containerCssClass: 'big-container',
+            placeholder: 'Select an option'
+        });
+
+        $('#select222').select2({
+            dropdownParent: $('#staticBackdrop2'),
             containerCssClass: 'big-container',
             placeholder: 'Select an option'
         });

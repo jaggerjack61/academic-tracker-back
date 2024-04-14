@@ -69,6 +69,7 @@
                             <option value="">Select Activity Type</option>
                             <option value="boolean">Binary</option>
                             <option value="value">Score</option>
+                            <option value="static">Static</option>
                         </select>
                     </div>
                     <div class="modal-footer">
@@ -101,6 +102,7 @@
                             <option value="">Select Activity Type</option>
                             <option value="boolean">Binary</option>
                             <option value="value">Score</option>
+                            <option value="static">Static</option>
                         </select>
                     </div>
                     <div class="modal-footer">

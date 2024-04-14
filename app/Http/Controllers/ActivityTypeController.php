@@ -21,7 +21,7 @@ class ActivityTypeController extends Controller
         $validatedData = $request->validate([
             'name' => 'required|string',
             'description' => 'nullable|string',
-            'type' => 'required|string|in:boolean,value'
+            'type' => 'required|string|in:boolean,value,static'
         ]);
 
         try {
@@ -41,7 +41,7 @@ class ActivityTypeController extends Controller
         $validatedData = $request->validate([
             'name' => 'required|string',
             'description' => 'nullable|string',
-            'type' => 'required|string|in:boolean,value'
+            'type' => 'required|string|in:boolean,value,static'
         ]);
 
         try {
