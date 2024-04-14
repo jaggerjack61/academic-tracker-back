@@ -15,10 +15,12 @@ use Illuminate\Support\Facades\Log;
 class ClassController extends Controller
 {
     public $studentController;
+
     public function __construct()
     {
         $this->studentController = new StudentController();
     }
+
     //
     public function showClasses()
     {
@@ -115,12 +117,11 @@ class ClassController extends Controller
 
     public function view(Course $course)
     {
-        $students = Student::where('is_active', true)->get();
-        $teachers = Teacher::where('is_active', true)->get();
         return view('pages.classes.view', [
             'class' => $course,
-            'students' => $students,
-            'teachers' => $teachers
+            'students' => Student::where('is_active', true)->get(),
+            'teachers' => Teacher::where('is_active', true)->get(),
+            'classes' => Course::where('is_active', true)->get()
         ]);
     }
 
@@ -130,8 +131,8 @@ class ClassController extends Controller
         $class = Course::find($request->course_id);
         foreach ($request->students as $student) {
             $enrolled = $this->studentController->validateEnrollment($student, $class->id);
-            if($enrolled) {
-                if(!$enrolled->is_active){
+            if ($enrolled) {
+                if (!$enrolled->is_active) {
                     $enrolled->is_active = true;
                     $enrolled->save();
                 }
@@ -142,6 +143,35 @@ class ClassController extends Controller
                 $studentInstance->save();
             }
         }
+        return back()->with('success', 'Students have been enrolled');
+    }
+
+    public function copy(Request $request)
+    {
+        try{
+            $currentEnrolledClass = Course::find($request->currentCourse);
+            foreach ($request->courses as $course) {
+                $class = Course::find($course);
+                foreach ($currentEnrolledClass->students as $student) {
+                    $enrolled = $this->studentController->validateEnrollment($student->student_id, $class->id);
+                    if ($enrolled) {
+                        if (!$enrolled->is_active) {
+                            $enrolled->is_active = true;
+                            $enrolled->save();
+                        }
+                    } else {
+                        $courseStudentInstance = new CourseStudent();
+                        $courseStudentInstance->student_id = $student->student_id;
+                        $courseStudentInstance->course_id = $class->id;
+                        $courseStudentInstance->save();
+                    }
+                }
+            }
+        } catch (\Exception $e) {
+            return back()->with('error',$e->getMessage());
+        }
+
+
         return back()->with('success', 'Students have been enrolled');
     }
 }

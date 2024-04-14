@@ -18,7 +18,8 @@
                         <h5 class="card-header">{{$class->name}}</h5>
                     </div>
                     <div class="col-md-3">
-                        <a href="{{route('show-users')}}" class="btn btn-sm btn-primary m-1 mt-4 text-white"><i class="bx bxs-pencil"></i></a>
+                        <a href="{{route('show-users')}}" class="btn btn-sm btn-primary m-1 mt-4 text-white"><i
+                                class="bx bxs-pencil"></i></a>
                     </div>
                 </div>
 
@@ -38,6 +39,8 @@
                     <a class="btn btn-sm btn-info mx-3 text-white" data-bs-toggle="modal"
                        data-bs-target="#staticBackdrop">Add
                         New</a>
+                    <a class="btn btn-sm btn-success mx-3 text-white" data-bs-toggle="modal"
+                       data-bs-target="#staticBackdrop1">Copy Students</a>
                     <table class="table">
                         <thead>
 
@@ -52,7 +55,7 @@
                         <tbody class="table-border-bottom-0">
                         @foreach($class->students as $student)
                             <tr>
-{{--                                {{dd($student)}}--}}
+                                {{--                                {{dd($student)}}--}}
                                 <td>{{$student->student->name}}</td>
                                 <td>{{$student->student->sex}}</td>
                                 <td>{{$student->student->dob}}</td>
@@ -60,9 +63,9 @@
                                 <td>
                         <span>
                             <a class="btn btn-sm btn-secondary text-white"
-                               href="{{route('view-activities',['class' => $class->id, 'student' => $student->id])}}">View</a>
+                               href="{{route('view-activities',['class' => $class->id, 'student' => $student->student_id])}}">View</a>
                             <a class="btn btn-sm btn-danger text-white"
-                               href="{{route('unenroll-student',['class' => $class->id, 'student' => $student->id])}}">Un-enroll</a>
+                               href="{{route('unenroll-student',['class' => $class->id, 'student' => $student->student_id])}}">Un-enroll</a>
                         </span>
                                 </td>
                             </tr>
@@ -76,6 +79,35 @@
         </div>
     </div>
 
+
+    <div class="modal fade" id="staticBackdrop1" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+         aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form action="{{route('copy-class')}}" method="post">
+                    @csrf
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="staticBackdropLabel">Copy Students to Other Classes</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <input type="hidden" value="{{$class->id}}" name="currentCourse">
+                        <label for="class">Students</label>
+                        <select style="width: 100%" required name="courses[]" multiple="multiple" id="select221">
+                            @foreach($classes as $course)
+                                <option
+                                    value="{{$course->id}}">{{$course->name}} {{$course->grade->name}} {{$course->subject->name}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 
     <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
          aria-labelledby="staticBackdropLabel" aria-hidden="true">
@@ -145,6 +177,12 @@
     <script>
         $('#select22').select2({
             dropdownParent: $('#staticBackdrop'),
+            containerCssClass: 'big-container',
+            placeholder: 'Select an option'
+        });
+
+        $('#select221').select2({
+            dropdownParent: $('#staticBackdrop1'),
             containerCssClass: 'big-container',
             placeholder: 'Select an option'
         });

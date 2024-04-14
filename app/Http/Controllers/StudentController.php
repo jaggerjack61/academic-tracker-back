@@ -23,8 +23,8 @@ class StudentController extends Controller
     public function enroll(Request $request)
     {
         try {
-            foreach ($request->class as $id) {
-                $enrolled = $this->validateEnrollment($request->student_id, $id);
+            foreach ($request->class as $course_id) {
+                $enrolled = $this->validateEnrollment($request->student_id, $course_id);
                 if($enrolled) {
                     if(!$enrolled->is_active){
                         $enrolled->is_active = true;
@@ -33,7 +33,7 @@ class StudentController extends Controller
                 } else {
                     $student = new CourseStudent();
                     $student->student_id = $request->student_id;
-                    $student->course_id = $id;
+                    $student->course_id = $course_id;
                     $student->save();
                 }
 

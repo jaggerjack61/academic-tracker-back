@@ -45,6 +45,7 @@ Route::middleware('auth')->group(function () {
             Route::patch('/', 'edit')->name('edit-class');
             Route::get('status/{course}', 'toggle')->name('toggle-class-status');
             Route::post('/enroll-class', 'enroll')->name('enroll-class');
+            Route::post('/copy-class', 'copy')->name('copy-class');
         });
     });
 
