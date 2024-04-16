@@ -25,7 +25,7 @@
                     <tr>
                         <td><i class="fab fa-angular fa-lg text-danger me-3"></i> <strong>{{$activityType->name}}</strong></td>
                         <td>{{$activityType->description}}</td>
-                        <td>{{$activityType->type =='boolean' ? 'Binary' : 'Score'}}</td>
+                        <td>{{$activityType->type =='boolean' ? 'binary' : ''}}{{$activityType->type =='value' ? 'score' : ''}}{{$activityType->type =='static' ? 'static' : ''}}</td>
                         <td>{{$activityType->is_active ? 'Active' : 'Inactive'}}</td>
                         <td>
                         <span>

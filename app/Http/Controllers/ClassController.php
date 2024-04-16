@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Activity;
+use App\Models\ActivityLog;
 use App\Models\ActivityType;
 use App\Models\Course;
 use App\Models\CourseStudent;
@@ -10,6 +12,8 @@ use App\Models\Grade;
 use App\Models\Student;
 use App\Models\Subject;
 use App\Models\Teacher;
+use App\Models\Term;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
@@ -23,12 +27,13 @@ class ClassController extends Controller
     }
 
     //
-    public function showClasses()
+    public function showClasses(Request $request)
     {
         $grades = Grade::where('is_active', true)->get();
         $subjects = Subject::where('is_active', true)->get();
         $teachers = Teacher::where('is_active', true)->get();
         $classes = Course::paginate(30);
+//        $url = $request->path();
         return view('pages.classes.index', compact('grades', 'subjects', 'teachers', 'classes'));
     }
 
@@ -150,11 +155,11 @@ class ClassController extends Controller
     public function copy(Request $request)
     {
         $currentEnrolledClass = Course::find($request->currentCourse);
-        try{
+        try {
 
             $this->iterateEnrolment($request, $currentEnrolledClass);
         } catch (\Exception $e) {
-            return back()->with('error',$e->getMessage());
+            return back()->with('error', $e->getMessage());
         }
 
 
@@ -164,13 +169,13 @@ class ClassController extends Controller
     public function move(Request $request)
     {
         $currentEnrolledClass = Course::find($request->currentCourse);
-        try{
+        try {
 
             $this->iterateEnrolment($request, $currentEnrolledClass);
             $currentEnrolledClass->students()->update(['is_active' => false]);
 //            $currentEnrolledClass->save();
         } catch (\Exception $e) {
-            return back()->with('error',$e->getMessage());
+            return back()->with('error', $e->getMessage());
         }
 
 
@@ -208,8 +213,67 @@ class ClassController extends Controller
         return view('pages.classes.activities', [
             'class' => $course,
             'activityTypes' => ActivityType::where('is_active', true)->get(),
-            'first' => ActivityType::where('is_active', true)->first()
+            'first' => ActivityType::where('is_active', true)->first()->id,
+            'activities' => Activity::where('course_id', $course->id)->get()
+
         ]);
     }
+
+    public function addActivity(Request $request)
+    {
+        try{
+        $term = $this->getTermForToday();
+        if(!$term){
+            return back()->with('error', 'There is currently no active term for your activity. Please go add a new term in your settings.');
+        }
+
+        $file = $request->file('file');
+        if ($file) {
+            $destinationPath = 'class/files';
+            $fileName = time() . '_' . $file->getClientOriginalName();
+            $file->move($destinationPath, $fileName);
+            $activity = new Activity();
+            $activity->activity_type_id = $request->activity_type_id;
+            $activity->teacher_id = $request->teacher_id;
+            $activity->course_id = $request->course_id;
+            $activity->name = $request->name;
+            $activity->note = $request->note;
+            $activity->total = $request->total;
+            $activity->due_date = $request->due_date;
+            $activity->term_id = $term->id;
+            $activity->file = $destinationPath . '/' . $fileName;
+            $activity->save();
+
+        } else {
+
+            $activity = new Activity();
+            $activity->activity_type_id = $request->activity_type_id;
+            $activity->teacher_id = $request->teacher_id;
+            $activity->course_id = $request->course_id;
+            $activity->name = $request->name;
+            $activity->note = $request->note;
+            $activity->total = $request->total;
+            $activity->due_date = $request->due_date;
+            $activity->term_id = $term->id;
+            $activity->save();
+        }
+
+        return back()->with('success', 'Activity has been created');
+        } catch (\Exception $e) {
+            return back()->with('error', $e->getMessage());
+        }
+    }
+
+
+    function getTermForToday() {
+        $today = Carbon::today()->toDateString();
+
+        return Term::where('start', '<=', $today)
+            ->where('end', '>=', $today)
+            ->where('is_active', true)
+            ->first();
+    }
+
+
 }
 

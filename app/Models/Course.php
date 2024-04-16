@@ -50,5 +50,10 @@ class Course extends Model
             });
     }
 
+    public function activities()
+    {
+        return $this->hasMany(Activity::class,'course_id','id');
+    }
+
 
 }

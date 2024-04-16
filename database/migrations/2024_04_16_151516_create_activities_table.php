@@ -11,12 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('activity_logs', function (Blueprint $table) {
+        Schema::create('activities', function (Blueprint $table) {
             $table->id();
-            $table->integer('student_id');
-            $table->integer('activity_id');
-            $table->float('score')->nullable();
-            $table->string('status')->default('incomplete');
+            $table->string('name');
+            $table->integer('teacher_id');
+            $table->integer('activity_type_id');
+            $table->string('course_id');
+            $table->string('term_id');
+            $table->string('note',4000)->nullable();
+            $table->float('total')->nullable();
+            $table->string('due_date')->nullable();
             $table->string('file')->nullable();
             $table->boolean('is_active')->default(true);
             $table->timestamps();
@@ -28,6 +32,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('activity_logs');
+        Schema::dropIfExists('activities');
     }
 };

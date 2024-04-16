@@ -47,7 +47,9 @@ Route::middleware('auth')->group(function () {
             Route::post('/enroll-class', 'enroll')->name('enroll-class');
             Route::post('/copy-class', 'copy')->name('copy-class');
             Route::post('/move-class', 'move')->name('move-class');
+            Route::post('activities/add', 'addActivity')->name('add-class-activity');
             Route::get('activities/{course}', 'viewActivities')->name('view-class-activities');
+
         });
     });
 

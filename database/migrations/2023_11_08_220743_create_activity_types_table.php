@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('activity_types', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('description')->nullable();
+            $table->string('description',1000)->nullable();
             $table->enum('type', ['boolean','value','static']);
             $table->boolean('is_active')->default(true);
             $table->timestamps();

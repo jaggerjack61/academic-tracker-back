@@ -47,7 +47,7 @@
                                data-bs-target="#staticBackdrop2">Move Students</a>
                         </div>
                         <div class="col-3">
-                            <a href="{{route('view-class-activities',['course' => $class->id])}}"
+                            <a class="btn btn-sm btn-primary" href="{{route('view-class-activities',['course' => $class->id])}}"
                                data-bs-target="#staticBackdrop2">Activities</a>
                         </div>
                     </div>

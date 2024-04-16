@@ -153,7 +153,7 @@
                         <div data-i18n="Account">Teachers</div>
                     </a>
                 </li>
-                <li class="menu-item {{Route::currentRouteName() == 'show-classes' ? 'active':''}}">
+                <li class="menu-item {{Route::currentRouteName() == 'show-classes' || Route::currentRouteName() == 'view-class' || Route::currentRouteName() == 'view-class-activities' ? 'active':''}}">
                     <a href="{{route('show-classes')}}" class="menu-link">
                         <i class="menu-icon tf-icons bx bx-book"></i>
                         <div data-i18n="Analytics">Classes</div>
