@@ -274,6 +274,11 @@ class ClassController extends Controller
             ->first();
     }
 
+    public function viewActivity(Activity $activity)
+    {
+        return view('pages.classes.view-activity', compact('activity'));
+    }
+
 
 }
 

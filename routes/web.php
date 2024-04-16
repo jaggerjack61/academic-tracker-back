@@ -41,6 +41,7 @@ Route::middleware('auth')->group(function () {
         Route::prefix('classes')->group(function () {
             Route::get('/', 'showClasses')->name('show-classes');
             Route::get('view/{course}', 'view')->name('view-class');
+            Route::get('view/activity/{activity}', 'viewActivity')->name('view-class-activity');
             Route::post('/', 'create')->name('create-class');
             Route::patch('/', 'edit')->name('edit-class');
             Route::get('status/{course}', 'toggle')->name('toggle-class-status');

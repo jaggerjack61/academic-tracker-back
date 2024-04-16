@@ -65,7 +65,7 @@
                                             <span>
                                                 <a class="btn btn-sm btn-primary mb-1 text-white">Edit</a>
                                                 @if($activity->type->type != 'static')
-                                                <a class="btn btn-sm mb-1 btn-secondary text-white">View</a>
+                                                <a href="{{route('view-class-activity', ['activity' => $activity->id])}}" class="btn btn-sm mb-1 btn-secondary text-white">View</a>
 
                                                 @endif
                                             </span>
