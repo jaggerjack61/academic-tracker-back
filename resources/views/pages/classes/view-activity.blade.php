@@ -21,7 +21,8 @@
                     <p><strong class="mx-2">Total:</strong> {{$activity->total}}</p>
                     <p><strong class="mx-2">Note:</strong> {{$activity->note}}</p>
                     <p><strong class="mx-2">Due Date:</strong> {{$activity->due_date}}</p>
-                    <p><strong class="mx-2">Fule:</strong> <a href='/{{$activity->file}}'>Download</a><i class="bx bx-link"></i></p>
+                    <p><strong class="mx-2">Fule:</strong> <a href='/{{$activity->file}}'>Download</a><i
+                            class="bx bx-link"></i></p>
 
                 </div>
             </div>
@@ -29,63 +30,77 @@
         <div class="col-9">
 
             <div class="card">
-                <h5 class="card-header">Students</h5>
-                <div class="table-responsive text-nowrap">
-                    <div class="row">
-                        <div class="col-md-9">
+                <form action="{{route('add-class-activity-log')}}" method="post">
+                    @csrf
+                    <input type="hidden" name="activity_id" value="{{$activity->id}}">
+                    <h5 class="card-header">Students</h5>
+                    <div class="table-responsive text-nowrap">
+                        <div class="row">
+                            <div class="col-md-9">
 
+                            </div>
+                            <div class="col-md-3">
+                                <button type="submit" class="btn btn-sm btn-primary"><i class="bx bx-check-double"></i>Submit
+                                    All
+                                </button>
+                            </div>
                         </div>
-                        <div class="col-md-3">
-                            <a href="" class="btn btn-sm btn-primary"><i class="bx bx-check-double"></i>Submit All</a>
-                        </div>
-                    </div>
-                    <table class="table">
-                        <thead>
+                        <table class="table">
+                            <thead>
 
-                        <tr>
-                            <th>Name</th>
-                            <th>{{$activity->type->type == 'value'?'Mark':''}}{{$activity->type->type == 'boolean'?'Status':''}}</th>
-                            <th>Input</th>
-                            <th>Actions</th>
-                        </tr>
-                        </thead>
-                        <tbody class="table-border-bottom-0">
-                        @foreach($activity->course->students as $student)
                             <tr>
-                                {{--                                {{dd($student)}}--}}
-                                <td>{{$student->student->name}}</td>
-                                <td>@if($activity->type->type == 'value')
-                                        {{$activity->score??'No mark yet'}}/{{$activity->total}}
-                                    @elseif($activity->type->type == 'boolean')
-                                        {{$activity->score == 2?'Marked as True':''}}
-                                        {{$activity->score == 1?'Marked as False':''}}
-                                        {{$activity->score == 0?'Not Marked Yet':''}}
-                                    @endif
-                                 </td>
-                                <td>
-
-                                @if($activity->type->type == 'value')
-                                   <input type="text" class="form-control" name="student[]" />
-                                @elseif($activity->type->type == 'boolean')
-                                    <input type="checkbox" name="student[]" />
-                                @endif
-                                </td>
-                                <td>
-                        <span>
-                            <a class="btn btn-sm btn-secondary text-white"
-                               href="{{route('view-student-activities',['class' => '', 'student' => ''])}}">Submit</a>
-                        </span>
-                                </td>
+                                <th>Name</th>
+                                <th>{{$activity->type->type == 'value'?'Mark':''}}{{$activity->type->type == 'boolean'?'Status':''}}</th>
+                                <th>Input</th>
                             </tr>
-                        @endforeach
+                            </thead>
+                            <tbody class="table-border-bottom-0">
+
+                            @foreach($activity->course->students as $student)
+
+                                <tr>
+                                    {{--                                {{dd($student)}}--}}
+                                    <td>{{$student->student->name}}</td>
+                                    <td>
+                                        @foreach($activity->logs as $log)
+                                            @if($log->student_id == $student->student_id)
+                                                @if($activity->type->type == 'value')
+                                                    {{$log->score??'No mark yet'}}/{{$activity->total}}
+                                                @elseif($activity->type->type == 'boolean')
+                                                    {{$log->score == 2?'Marked as True':''}}
+                                                    {{$log->score == 1?'Marked as False':''}}
+
+                                                @endif
+                                            @endif
+                                        @endforeach
+                                    </td>
+                                    <td>
+
+                                        @if($activity->type->type == 'value')
+                                            <input type="text" class="form-control" name="student[]"/>
+                                        @elseif($activity->type->type == 'boolean')
+                                            <input type="checkbox" name="student[{{$student->student_id}}]"
+                                            @foreach($activity->logs as $log)
+                                                @if($log->student_id == $student->student_id)
+                                                    {{$log->score == 2?'checked':''}}
+                                                    @endif
+                                                @endforeach
+                                            />
+                                        @endif
+
+                                    </td>
+
+                                </tr>
+
+                            @endforeach
 
 
-                        </tbody>
-                    </table>
-                </div>
+                            </tbody>
+                        </table>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
-
 
 @endsection

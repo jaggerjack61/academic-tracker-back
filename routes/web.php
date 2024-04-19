@@ -49,6 +49,7 @@ Route::middleware('auth')->group(function () {
             Route::post('/copy-class', 'copy')->name('copy-class');
             Route::post('/move-class', 'move')->name('move-class');
             Route::post('activities/add', 'addActivity')->name('add-class-activity');
+            Route::post('activities/log/add', 'addActivityLog')->name('add-class-activity-log');
             Route::get('activities/{course}', 'viewActivities')->name('view-class-activities');
 
         });

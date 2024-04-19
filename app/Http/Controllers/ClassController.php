@@ -221,6 +221,7 @@ class ClassController extends Controller
 
     public function addActivity(Request $request)
     {
+
         try{
         $term = $this->getTermForToday();
         if(!$term){
@@ -277,6 +278,96 @@ class ClassController extends Controller
     public function viewActivity(Activity $activity)
     {
         return view('pages.classes.view-activity', compact('activity'));
+    }
+
+    public function addActivityLog(Request $request)
+    {
+//        dd($request);
+        try {
+            $i = 0;
+            $marks = $request->student;
+//            dd($marks);
+            $activity = Activity::find($request->activity_id);
+            $studentsfromclass = $activity->course->students;
+            if($activity->type->type == 'value') {
+                foreach ($studentsfromclass as $student) {
+                    $activityLog = ActivityLog::where('activity_id', $request->activity_id)->where('student_id', $student->student_id)->first();
+                    if ($marks[$i] > $activity->total) {
+                        return back()->with('error', 'Students cannot score more than total marks. Please check again. ');
+                    }
+                    if ($activityLog) {
+                        if ($marks[$i]) {
+                            $activityLog->score = $marks[$i];
+                        }
+                        $activityLog->save();
+                    } else {
+                        $activityLog = new ActivityLog();
+                        $activityLog->activity_id = $request->activity_id;
+                        $activityLog->student_id = $student->student_id;
+                        if ($marks[$i]) {
+                            $activityLog->score = $marks[$i];
+                        }
+                        $activityLog->save();
+                    }
+
+                    $i++;
+                }
+                return back()->with('success', 'Activity has been logged');
+            }
+
+
+            elseif ($activity->type->type == 'boolean')
+            {
+                $studentIds =null;
+                if($marks) {
+                    $studentIds = array_keys($marks);
+
+
+                    foreach ($studentIds as $id) {
+                        $activityLog = ActivityLog::where('activity_id', $request->activity_id)->where('student_id', $id)->first();
+                        if ($activityLog) {
+                            $activityLog->score = $marks[$id] == 'on' ? 2 : 1;
+                            $activityLog->save();
+                        } else {
+                            $activityLog = new ActivityLog();
+                            $activityLog->activity_id = $request->activity_id;
+                            $activityLog->student_id = $id;
+                            $activityLog->score = $marks[$id] == 'on' ? 2 : 1;
+
+                            $activityLog->save();
+                        }
+                    }
+                    $logs = ActivityLog::where('activity_id', $request->activity_id)
+                        ->whereNotIn('student_id', $studentIds)
+                        ->get();
+                    if($logs){
+                        foreach ($logs as $log) {
+                            $log->score = 1;
+                            $log->save();
+                        }
+                    }
+
+
+                }
+                else {
+                    $logs = ActivityLog::where('activity_id', $request->activity_id)
+                        ->get();
+                    if ($logs) {
+                        foreach ($logs as $log) {
+                            $log->score = 1;
+                            $log->save();
+                        }
+                    }
+                }
+                return back()->with('success', 'Activity has been logged');
+            }
+            else {
+                return back()->with('error', 'Activity has not been logged');
+            }
+        } catch (\Exception $e) {
+            return back()->with('error', $e->getMessage());
+        }
+
     }
 
 
