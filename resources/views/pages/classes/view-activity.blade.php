@@ -21,7 +21,7 @@
                     <p><strong class="mx-2">Total:</strong> {{$activity->total}}</p>
                     <p><strong class="mx-2">Note:</strong> {{$activity->note}}</p>
                     <p><strong class="mx-2">Due Date:</strong> {{$activity->due_date}}</p>
-                    <p><strong class="mx-2">Fule:</strong> <a href='/{{$activity->file}}'>Download</a><i
+                    <p><strong class="mx-2">File:</strong> <a href='/{{$activity->file}}'>Download</a><i
                             class="bx bx-link"></i></p>
 
                 </div>

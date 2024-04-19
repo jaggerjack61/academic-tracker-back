@@ -74,8 +74,8 @@ Route::middleware('auth')->group(function () {
 
         Route::controller(TeacherController::class)->group(function () {
             Route::prefix('teachers')->group(function () {
-                Route::get('/', 'showTeachers')->name('show-teachers');
-                Route::get('view', 'view')->name('view-teacher');
+                Route::get('/', 'show')->name('show-teachers');
+                Route::get('view/{teacher}', 'view')->name('view-teacher');
             });
         });
 

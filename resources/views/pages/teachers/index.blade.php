@@ -5,54 +5,8 @@
 @endsection
 
 @section('content')
-    <div class="card">
-        <h5 class="card-header">Teachers</h5>
-        <div class="table-responsive text-nowrap">
-            <table class="table">
-                <thead>
-                <a class="btn btn-sm btn-info mx-3 text-white" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Add
-                    New</a>
-                <tr>
-                    <th>Teacher ID</th>
-                    <th>Name</th>
-                    <th>Sex</th>
-                    <th>Status</th>
-                    <th>Actions</th>
-                </tr>
-                </thead>
-                <tbody class="table-border-bottom-0">
-                <tr>
-                    <td><i class="fab fa-angular fa-lg text-danger me-3"></i> <strong>TC230005E</strong></td>
-                    <td>Letwin Moyo</td>
-                    <td><span class="badge bg-label-primary me-1">Female</span></td>
-                    <td>Active</td>
-                    <td>
-                        <span>
-                            <a class="btn btn-sm btn-primary text-white">Edit</a>
-                            <a class="btn btn-sm btn-secondary text-white" href="{{route('view-teacher')}}">View</a>
-                            <a class="btn btn-sm btn-danger text-white">Deactivate</a>
-                        </span>
-                    </td>
-                </tr>
-                <tr>
-                    <td><i class="fab fa-angular fa-lg text-danger me-3"></i> <strong>TC230005E</strong></td>
-                    <td>Shumba Inoruma</td>
-                    <td><span class="badge bg-label-primary me-1">Male</span></td>
-                    <td>Active</td>
-                    <td>
-                        <span>
-                            <a class="btn btn-sm btn-primary text-white">Edit</a>
-                            <a class="btn btn-sm btn-secondary text-white" href="{{route('view-teacher')}}">View</a>
-                            <a class="btn btn-sm btn-danger text-white">Deactivate</a>
-                        </span>
-                    </td>
-                </tr>
 
-                </tbody>
-            </table>
-        </div>
-    </div>
-
+    <livewire:teacher-table/>
 
 
     <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"

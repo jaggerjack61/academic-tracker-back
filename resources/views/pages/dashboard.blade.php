@@ -5,7 +5,8 @@
 @endsection
 
 @section('content')
-    <script type="text/javascript" src="/assets/js/chart.js"></script>
+    <script type="text/javascript" src="/assets/js/loader.js"></script>
+{{--    <script type="text/javascript" src="/assets/js/chart.js"></script>--}}
     <script type="text/javascript">
         // Load the Visualization API and the corechart package
         google.charts.load('current', {'packages':['corechart']});
@@ -55,16 +56,15 @@
             data.addColumn('string', 'Category');
             data.addColumn('number', 'Percentage');
             data.addRows([
-                ['Mathematics', 25],
-                ['Physics', 30],
-                ['English', 20],
-                ['Shona', 25]
+                @foreach($classes as $class)
+                ["{{$class->name.' '.$class->grade->name.' '.$class->subject->name}}", {{$class->students->count()}}],
+                @endforeach
             ]);
 
             // Set chart options
             var options = {
                 title: 'Class Distribution',
-                pieHole: 0.8,
+                pieHole: 0.4,
                 legend: 'none'
             };
 
@@ -129,7 +129,7 @@
                             </div>
                         </div>
                         <span class="fw-semibold d-block mb-1">Students</span>
-                        <h3 class="card-title mb-2">1262</h3>
+                        <h3 class="card-title mb-2">{{$studentCount}}</h3>
                     </div>
                 </div>
             </div>
@@ -152,13 +152,13 @@
                                     <i class="bx bx-dots-vertical-rounded"></i>
                                 </button>
                                 <div class="dropdown-menu dropdown-menu-end" aria-labelledby="cardOpt3">
-                                    <a class="dropdown-item" href="{{route('show-students')}}">View More</a>
+                                    <a class="dropdown-item" href="{{route('show-teachers')}}">View More</a>
 
                                 </div>
                             </div>
                         </div>
                         <span class="fw-semibold d-block mb-1">Teachers</span>
-                        <h3 class="card-title mb-2">25</h3>
+                        <h3 class="card-title mb-2">{{$teachers->count()}}</h3>
                     </div>
                 </div>
             </div>
@@ -173,7 +173,7 @@
             <div class="card-header d-flex align-items-center justify-content-between pb-0">
                 <div class="card-title mb-0">
                     <h5 class="m-0 me-2">Class Distribution</h5>
-                    <small class="text-muted">47 Total Classes</small>
+                    <small class="text-muted">{{$classes->count()}} Total Classes</small>
                 </div>
                 <div class="dropdown">
                     <button
@@ -194,71 +194,28 @@
                 </div>
             </div>
             <div class="card-body">
+
                 <div class="d-flex justify-content-between align-items-center mb-3">
-                    <div class="d-flex flex-column align-items-center gap-1">
-                        <h2 class="mb-2">1262</h2>
-                        <span>Total Students</span>
-                    </div>
+{{--                    <div class="d-flex flex-column align-items-center gap-1">--}}
+{{--                        --}}
+{{--                    </div>--}}
                     <div id="chart_div" style="width: 100%"></div>
                 </div>
                 <ul class="p-0 m-0">
+                    @foreach($classes->take(5) as $class)
                     <li class="d-flex mb-4 pb-1">
 
                         <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
                             <div class="me-2">
-                                <h6 class="mb-0">Mathematics</h6>
+                                <h6 class="mb-0">{{$class->name.' '.$class->grade->name.' '.$class->subject->name}}</h6>
 
                             </div>
                             <div class="user-progress">
-                                <small class="fw-semibold">82.5%</small>
+                                <small class="fw-semibold">{{substr(str($class->students->count()/$studentCount*100),0,5)}}%</small>
                             </div>
                         </div>
                     </li>
-                    <li class="d-flex mb-4 pb-1">
-
-                        <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-                            <div class="me-2">
-                                <h6 class="mb-0">Mathematics</h6>
-
-                            </div>
-                            <div class="user-progress">
-                                <small class="fw-semibold">82.5%</small>
-                            </div>
-                        </div>
-                    </li><li class="d-flex mb-4 pb-1">
-
-                        <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-                            <div class="me-2">
-                                <h6 class="mb-0">English</h6>
-
-                            </div>
-                            <div class="user-progress">
-                                <small class="fw-semibold">90%</small>
-                            </div>
-                        </div>
-                    </li><li class="d-flex mb-4 pb-1">
-
-                        <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-                            <div class="me-2">
-                                <h6 class="mb-0">Shona</h6>
-
-                            </div>
-                            <div class="user-progress">
-                                <small class="fw-semibold">32.5%</small>
-                            </div>
-                        </div>
-                    </li><li class="d-flex mb-4 pb-1">
-
-                        <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-                            <div class="me-2">
-                                <h6 class="mb-0">Physics</h6>
-
-                            </div>
-                            <div class="user-progress">
-                                <small class="fw-semibold">31.5%</small>
-                            </div>
-                        </div>
-                    </li>
+                    @endforeach
                 </ul>
             </div>
         </div>
@@ -314,96 +271,22 @@
             </div>
             <div class="card-body">
                 <ul class="p-0 m-0">
+{{--                    {{dd($students)}}--}}
+                    @foreach($students as $student)
                     <li class="d-flex mb-4 pb-1">
 
                         <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
                             <div class="me-2">
 
-                                <h6 class="mb-0">Chipo Moyo</h6>
+                                <h6 class="mb-0">{{$student->name}}</h6>
                             </div>
                             <div class="user-progress d-flex align-items-center gap-1">
-                                <span class="text-muted">SD23005E</span>
+                                <span class="text-muted">{{$student->id_number}}</span>
                             </div>
                         </div>
                     </li>
-                    <li class="d-flex mb-4 pb-1">
+                    @endforeach
 
-                        <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-                            <div class="me-2">
-
-                                <h6 class="mb-0">Chris Mack</h6>
-                            </div>
-                            <div class="user-progress d-flex align-items-center gap-1">
-                                <span class="text-muted">SD23005E</span>
-                            </div>
-                        </div>
-                    </li><li class="d-flex mb-4 pb-1">
-
-                        <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-                            <div class="me-2">
-
-                                <h6 class="mb-0">Samuel Anesu</h6>
-                            </div>
-                            <div class="user-progress d-flex align-items-center gap-1">
-                                <span class="text-muted">SD23005E</span>
-                            </div>
-                        </div>
-                    </li><li class="d-flex mb-4 pb-1">
-
-                        <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-                            <div class="me-2">
-
-                                <h6 class="mb-0">Godwin Johns</h6>
-                            </div>
-                            <div class="user-progress d-flex align-items-center gap-1">
-                                <span class="text-muted">SD23005E</span>
-                            </div>
-                        </div>
-                    </li><li class="d-flex mb-4 pb-1">
-
-                        <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-                            <div class="me-2">
-
-                                <h6 class="mb-0">Nadia Ishmur</h6>
-                            </div>
-                            <div class="user-progress d-flex align-items-center gap-1">
-                                <span class="text-muted">SD23005E</span>
-                            </div>
-                        </div>
-                    </li><li class="d-flex mb-4 pb-1">
-
-                        <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-                            <div class="me-2">
-
-                                <h6 class="mb-0">Milvette Tambo</h6>
-                            </div>
-                            <div class="user-progress d-flex align-items-center gap-1">
-                                <span class="text-muted">SD23005E</span>
-                            </div>
-                        </div>
-                    </li><li class="d-flex mb-4 pb-1">
-
-                        <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-                            <div class="me-2">
-
-                                <h6 class="mb-0">David Moyo</h6>
-                            </div>
-                            <div class="user-progress d-flex align-items-center gap-1">
-                                <span class="text-muted">SD23005E</span>
-                            </div>
-                        </div>
-                    </li><li class="d-flex mb-4 pb-1">
-
-                        <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-                            <div class="me-2">
-
-                                <h6 class="mb-0">Marvel Tsuro</h6>
-                            </div>
-                            <div class="user-progress d-flex align-items-center gap-1">
-                                <span class="text-muted">SD23005E</span>
-                            </div>
-                        </div>
-                    </li>
                 </ul>
             </div>
         </div>
