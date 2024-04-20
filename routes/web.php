@@ -5,6 +5,7 @@ use App\Http\Controllers\ClassController;
 use App\Http\Controllers\GradeController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MainController;
+use App\Http\Controllers\ParentController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\SubjectController;
@@ -76,6 +77,14 @@ Route::middleware('auth')->group(function () {
             Route::prefix('teachers')->group(function () {
                 Route::get('/', 'show')->name('show-teachers');
                 Route::get('view/{teacher}', 'view')->name('view-teacher');
+            });
+        });
+        Route::controller(ParentController::class)->group(function () {
+            Route::prefix('parents')->group(function () {
+                Route::get('/', 'show')->name('show-parents');
+                Route::get('view/{parent}', 'view')->name('view-parent');
+                Route::post('view/add/relationship', 'addRelationship')->name('add-relationship');
+                Route::get('view/remove/{relationship}', 'removeRelationship')->name('remove-relationship');
             });
         });
 

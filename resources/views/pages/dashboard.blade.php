@@ -85,7 +85,7 @@
                             academic performance.
                         </p>
 
-                        <a href="javascript:;" class="btn btn-sm btn-outline-primary">View Reports</a>
+                        <a href="{{route('show-classes')}}" class="btn btn-sm btn-outline-primary">Open Classes</a>
                     </div>
                 </div>
                 <div class="col-sm-5 text-center text-sm-left">

@@ -1,7 +1,7 @@
 <div>
     <div class="card">
-        <h5 class="card-header">Students</h5>
-        <div class="table-responsive text-nowrap">
+        <h5 class="card-header">Parents</h5>
+        <div class="table-responsive text-wrap">
             <div class="row">
                 <div class="col-md-1">
                     <a href="{{route('show-users')}}"  class="btn btn-sm btn-info m-2 text-white" >Add
@@ -28,45 +28,42 @@
 
                 <tr>
                     <th>Name</th>
-                    <th>Date of Birth</th>
-                    <th>Phone Number</th>
-
+                    <th>Phone</th>
                     <th>Sex</th>
                     <th>Status</th>
                     <th>Actions</th>
                 </tr>
                 </thead>
                 <tbody class="table-border-bottom-0">
-                @foreach($students as $student)
+                @foreach($parents as $parent)
                     <tr>
-                        <td><i class="fab fa-angular fa-lg text-danger me-3"></i> <strong>{{$student->name}}</strong>
-                        </td>
-                        <td>{{$student->dob}}</td>
-                        <td>
-                            {{$student->phone_number}}
-                        </td>
-
-                        <td>{{$student->sex}}</td>
-                        <td><span class="badge bg-label-primary me-1">{{$student->is_active ? 'Active' : 'Inactive'}}</span></td>
+                        <td><i class="fab fa-angular fa-lg text-danger me-3"></i> <strong>{{$parent->name}}</strong></td>
+                        <td>{{$parent->phone_number}}</td>
+                        <td><span class="badge bg-label-primary me-1">{{$parent->sex}}</span></td>
+                        <td><span class="badge bg-label-primary me-1">{{$parent->is_active ? 'Active' : 'Inactive'}}</span></td>
                         <td>
                         <span>
-                            <a href="{{route('show-users')}}"  class="btn btn-sm btn-primary text-white">Edit</a>
-                            <a href="{{route('view-student', ['student' => $student->id])}}" class="btn btn-sm btn-secondary text-white">View</a>
-                             @if($student->is_active)
-                                <a href="{{route('toggle-user-status',$student->user_id)}}"
+                            <a class="btn btn-sm btn-secondary text-white" href="{{route('view-parent', ['parent' => $parent->id])}}">View</a>
+                            @if($parent->is_active)
+                                <a href="{{route('toggle-user-status',$parent->user_id)}}"
                                    class="btn btn-sm btn-danger text-white">Deactivate</a>
                             @else
-                                <a href="{{route('toggle-user-status',$student->user_id)}}"
+                                <a href="{{route('toggle-user-status',$parent->user_id)}}"
                                    class="btn btn-sm btn-success text-white">Activate</a>
                             @endif
                         </span>
                         </td>
                     </tr>
                 @endforeach
+
                 </tbody>
             </table>
         </div>
-
     </div>
-    <div class="m-2 p-2 bg-white rounded col-3"> {{$students->count()}} Students</div>
+    <div class="card m-2">
+        <div class="row">
+            .
+        </div>
+    </div>
+
 </div>

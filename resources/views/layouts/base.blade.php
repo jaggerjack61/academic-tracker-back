@@ -142,7 +142,7 @@
                     </a>
                 </li>
                 <li class="menu-item {{Route::currentRouteName() == 'show-parents' || Route::currentRouteName() == 'view-parent' ? 'active':''}}">
-                    <a href="{{route('show-teachers')}}" class="menu-link">
+                    <a href="{{route('show-parents')}}" class="menu-link">
                         <i class="menu-icon tf-icons bx bxs-user-voice"></i>
                         <div data-i18n="Account">Parents</div>
                     </a>
@@ -200,16 +200,16 @@
 
                     </ul>
                 </li>
-                <li class="menu-item">
-                    <a
-                        href="https://themeselection.com/demo/sneat-bootstrap-html-admin-template/documentation/"
-                        target="_blank"
-                        class="menu-link"
-                    >
-                        <i class="menu-icon tf-icons bx bx-file"></i>
-                        <div data-i18n="Documentation">About</div>
-                    </a>
-                </li>
+{{--                <li class="menu-item">--}}
+{{--                    <a--}}
+{{--                        href="https://themeselection.com/demo/sneat-bootstrap-html-admin-template/documentation/"--}}
+{{--                        target="_blank"--}}
+{{--                        class="menu-link"--}}
+{{--                    >--}}
+{{--                        <i class="menu-icon tf-icons bx bx-file"></i>--}}
+{{--                        <div data-i18n="Documentation">About</div>--}}
+{{--                    </a>--}}
+{{--                </li>--}}
             </ul>
         </aside>
         <!-- / Menu -->
@@ -230,9 +230,12 @@
 
                     @yield('content')
                     <!-- Content wrapper -->
+                    <div class="footer m-3">Swole Devs &copy {{now()->format('Y')}}</div>
                 </div>
                 <!-- / Layout page -->
+
             </div>
+
 
             <!-- Overlay -->
             <div class="layout-overlay layout-menu-toggle"></div>
