@@ -67,8 +67,8 @@
                                                 @if($activity->type->type == 'value')
                                                     {{$log->score??'No mark yet'}}/{{$activity->total}}
                                                 @elseif($activity->type->type == 'boolean')
-                                                    {{$log->score == 2?'Marked as True':''}}
-                                                    {{$log->score == 1?'Marked as False':''}}
+                                                    {{$log->score == 2?$log->activity->type->true_value:''}}
+                                                    {{$log->score == 1?$log->activity->type->false_value:''}}
 
                                                 @endif
                                             @endif

@@ -17,6 +17,9 @@ return new class extends Migration
             $table->string('description',1000)->nullable();
             $table->enum('type', ['boolean','value','static']);
             $table->boolean('is_active')->default(true);
+            $table->string('image', 1000);
+            $table->string('true_value')->nullable();
+            $table->string('false_value')->nullable();
             $table->timestamps();
         });
     }

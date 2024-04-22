@@ -35,4 +35,9 @@ class Student extends Model
             ->orWhere('sex', 'LIKE' , '%'.$search.'%');
     }
 
+    public function activities()
+    {
+        return $this->hasMany(ActivityLog::class, 'student_id', 'id');
+    }
+
 }

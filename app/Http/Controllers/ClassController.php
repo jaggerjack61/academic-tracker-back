@@ -282,19 +282,20 @@ class ClassController extends Controller
 
     public function addActivityLog(Request $request)
     {
-//        dd($request);
         try {
             $i = 0;
             $marks = $request->student;
-//            dd($marks);
             $activity = Activity::find($request->activity_id);
             $studentsfromclass = $activity->course->students;
-            if($activity->type->type == 'value') {
+
+            if ($activity->type->type == 'value') {
                 foreach ($studentsfromclass as $student) {
                     $activityLog = ActivityLog::where('activity_id', $request->activity_id)->where('student_id', $student->student_id)->first();
+
                     if ($marks[$i] > $activity->total) {
                         return back()->with('error', 'Students cannot score more than total marks. Please check again. ');
                     }
+
                     if ($activityLog) {
                         if ($marks[$i]) {
                             $activityLog->score = $marks[$i];
@@ -313,61 +314,74 @@ class ClassController extends Controller
                     $i++;
                 }
                 return back()->with('success', 'Activity has been logged');
-            }
-
-
-            elseif ($activity->type->type == 'boolean')
-            {
-                $studentIds =null;
-                if($marks) {
+            } elseif ($activity->type->type == 'boolean') {
+                $studentIds = null;
+                if ($marks) {
                     $studentIds = array_keys($marks);
-
 
                     foreach ($studentIds as $id) {
                         $activityLog = ActivityLog::where('activity_id', $request->activity_id)->where('student_id', $id)->first();
                         if ($activityLog) {
-                            $activityLog->score = $marks[$id] == 'on' ? 2 : 1;
+                            $activityLog->score = $marks[$id] ? 2 : 1;
                             $activityLog->save();
                         } else {
                             $activityLog = new ActivityLog();
                             $activityLog->activity_id = $request->activity_id;
                             $activityLog->student_id = $id;
-                            $activityLog->score = $marks[$id] == 'on' ? 2 : 1;
-
+                            $activityLog->score = $marks[$id] ? 2 : 1;
                             $activityLog->save();
                         }
                     }
-                    $logs = ActivityLog::where('activity_id', $request->activity_id)
-                        ->whereNotIn('student_id', $studentIds)
-                        ->get();
-                    if($logs){
-                        foreach ($logs as $log) {
-                            $log->score = 1;
-                            $log->save();
+
+                    // Mark remaining students as false
+                    $remainingStudents = array_diff(
+                        array_column($studentsfromclass->toArray(), 'student_id'),
+                        $studentIds
+                    );
+
+                    foreach ($remainingStudents as $studentId) {
+                        $activityLog = ActivityLog::where('activity_id', $request->activity_id)
+                            ->where('student_id', $studentId)
+                            ->first();
+
+                        if ($activityLog) {
+                            $activityLog->score = 1; // Mark as false
+                            $activityLog->save();
+                        } else {
+                            $activityLog = new ActivityLog();
+                            $activityLog->activity_id = $request->activity_id;
+                            $activityLog->student_id = $studentId;
+                            $activityLog->score = 1; // Mark as false
+                            $activityLog->save();
                         }
                     }
+                } else {
+                    // Mark all students as false
+                    foreach ($studentsfromclass as $student) {
+                        $activityLog = ActivityLog::where('activity_id', $request->activity_id)
+                            ->where('student_id', $student->student_id)
+                            ->first();
 
-
-                }
-                else {
-                    $logs = ActivityLog::where('activity_id', $request->activity_id)
-                        ->get();
-                    if ($logs) {
-                        foreach ($logs as $log) {
-                            $log->score = 1;
-                            $log->save();
+                        if ($activityLog) {
+                            $activityLog->score = 1; // Mark as false
+                            $activityLog->save();
+                        } else {
+                            $activityLog = new ActivityLog();
+                            $activityLog->activity_id = $request->activity_id;
+                            $activityLog->student_id = $student->student_id;
+                            $activityLog->score = 1; // Mark as false
+                            $activityLog->save();
                         }
                     }
                 }
+
                 return back()->with('success', 'Activity has been logged');
-            }
-            else {
+            } else {
                 return back()->with('error', 'Activity has not been logged');
             }
         } catch (\Exception $e) {
             return back()->with('error', $e->getMessage());
         }
-
     }
 
 

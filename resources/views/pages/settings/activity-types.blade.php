@@ -16,6 +16,7 @@
                     <th>Name</th>
                     <th>Description</th>
                     <th>Type</th>
+                    <th>Image Icon</th>
                     <th>Status</th>
                     <th>Actions</th>
                 </tr>
@@ -25,7 +26,10 @@
                     <tr>
                         <td><i class="fab fa-angular fa-lg text-danger me-3"></i> <strong>{{$activityType->name}}</strong></td>
                         <td>{{$activityType->description}}</td>
-                        <td>{{$activityType->type =='boolean' ? 'binary' : ''}}{{$activityType->type =='value' ? 'score' : ''}}{{$activityType->type =='static' ? 'static' : ''}}</td>
+                        <td>{{$activityType->type =='boolean' ? 'binary' : ''}}{{$activityType->type =='value' ? 'score' : ''}}{{$activityType->type =='static' ? 'static' : ''}}
+                            {{$activityType->type =='boolean' ?$activityType->true_value.'|'.$activityType->false_value :''}}
+                            </td>
+                            <td><img class="rounded" src="/{{$activityType->image}}" style="width:50px" alt="icon"/></td>
                         <td>{{$activityType->is_active ? 'Active' : 'Inactive'}}</td>
                         <td>
                         <span>
@@ -53,7 +57,7 @@
          aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
-                <form method="post" action="{{route('create-activity-type')}}">
+                <form method="post" action="{{route('create-activity-type')}}" enctype="multipart/form-data">
                     @csrf
                     <div class="modal-header">
                         <h5 class="modal-title" id="staticBackdropLabel">New Activity Type</h5>
@@ -65,12 +69,15 @@
                                required/>
                         <input type="text" class="form-control my-2" placeholder="Activity type description" name="description"
                                required/>
-                        <select class="form-control my-2" name="type" required>
+                        <select id="inputType" class="form-control my-2" name="type" required>
                             <option value="">Select Activity Type</option>
                             <option value="boolean">Binary</option>
                             <option value="value">Score</option>
                             <option value="static">Static</option>
                         </select>
+                        <div id="inputContainer"></div>
+                        <label>Image</label>
+                        <input type="file" class="form-control my-2" name="file" />
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -85,7 +92,7 @@
          aria-labelledby="editActivityTypeModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
-                <form method="post" action="{{ route('edit-activity-type') }}">
+                <form method="post" action="{{ route('edit-activity-type') }}"  enctype="multipart/form-data">
                     @csrf
                     @method('PATCH')
                     <div class="modal-header">
@@ -98,12 +105,15 @@
                                required/>
                         <input type="text" class="form-control my-2" placeholder="Activity type description" name="description" id="edit-activityType-description"
                                required/>
-                        <select class="form-control my-2" name="type" id="edit-activityType-type" required>
-                            <option value="">Select Activity Type</option>
-                            <option value="boolean">Binary</option>
-                            <option value="value">Score</option>
-                            <option value="static">Static</option>
-                        </select>
+{{--                        <select id="inputType1" class="form-control my-2" name="type" id="edit-activityType-type" required>--}}
+{{--                            <option value="">Select Activity Type</option>--}}
+{{--                            <option value="boolean">Binary</option>--}}
+{{--                            <option value="value">Score</option>--}}
+{{--                            <option value="static">Static</option>--}}
+{{--                        </select>--}}
+{{--                        <div id="inputContainer1"></div>--}}
+                        <label>Image</label>
+                        <input type="file" class="form-control my-2" name="file" />
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -125,6 +135,73 @@
             document.getElementById('edit-activityType-description').value = description;
             document.getElementById('edit-activityType-type').value = type;
         }
+
+        const inputTypeSelect = document.getElementById('inputType');
+        const inputContainer = document.getElementById('inputContainer');
+
+        inputTypeSelect.addEventListener('change', function() {
+            const selectedType = this.value;
+            inputContainer.innerHTML = ''; // Clear previous input
+
+            let inputElement;
+            let inputElement1;
+            if (selectedType === 'boolean') {
+                inputElement = document.createElement('input');
+                inputElement.type = 'text';
+                inputElement.placeholder = 'Positive or True Value';
+                inputElement.classList.add("form-control");
+                inputElement.classList.add("my-2");
+                inputElement.name = 'true_value';
+                inputElement.required = true;
+                inputElement1 = document.createElement('input');
+                inputElement1.type = 'text';
+                inputElement1.placeholder = 'Negative or False Value';
+                inputElement1.classList.add("form-control");
+                inputElement1.classList.add("my-2");
+                inputElement1.name = 'false_value';
+                inputElement1.required = true;
+
+            }
+
+            if (inputElement && inputElement1) {
+                inputContainer.appendChild(inputElement);
+                inputContainer.appendChild(inputElement1);
+            }
+        });
+
+
+        // const inputTypeSelect1 = document.getElementById('inputType1');
+        // const inputContainer1= document.getElementById('inputContainer1');
+        //
+        // inputTypeSelect1.addEventListener('change', function() {
+        //     const selectedType = this.value;
+        //     inputContainer1.innerHTML = ''; // Clear previous input
+        //
+        //     let inputElement3;
+        //     let inputElement4;
+        //     if (selectedType === 'boolean') {
+        //         inputElement3 = document.createElement('input');
+        //         inputElement3.type = 'text';
+        //         inputElement3.placeholder = 'Positive or True Value';
+        //         inputElement3.classList.add("form-control");
+        //         inputElement3.classList.add("my-2");
+        //         inputElement3.name = 'true_value';
+        //         inputElement3.required = true;
+        //         inputElement4 = document.createElement('input');
+        //         inputElement4.type = 'text';
+        //         inputElement4.placeholder = 'Negative or False Value';
+        //         inputElement4.classList.add("form-control");
+        //         inputElement4.classList.add("my-2");
+        //         inputElement4.name = 'false_value';
+        //         inputElement4.required = true;
+        //
+        //     }
+        //
+        //     if (inputElement3 && inputElement4) {
+        //         inputContainer1.appendChild(inputElement3);
+        //         inputContainer1.appendChild(inputElement4);
+        //     }
+        // });
     </script>
 
 

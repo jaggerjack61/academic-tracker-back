@@ -29,4 +29,5 @@ class Activity extends Model
     {
         return $this->hasOne(Course::class, 'id', 'course_id');
     }
+
 }

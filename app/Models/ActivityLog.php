@@ -21,4 +21,9 @@ class ActivityLog extends Model
     {
         return $this->belongsTo(Student::class);
     }
+
+    public function activity()
+    {
+        return $this->hasOne(Activity::class, 'id', 'activity_id');
+    }
 }

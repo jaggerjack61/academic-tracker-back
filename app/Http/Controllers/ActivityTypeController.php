@@ -17,12 +17,19 @@ class ActivityTypeController extends Controller
 
     public function create(Request $request)
     {
-        // Validate the request data
+        $file = $request->file('file');
+        $destinationPath = 'activity_types/files';
+        $fileName = time() . '_' . $file->getClientOriginalName();
+        $file->move($destinationPath, $fileName);
+
         $validatedData = $request->validate([
             'name' => 'required|string',
             'description' => 'nullable|string',
-            'type' => 'required|string|in:boolean,value,static'
+            'type' => 'required|string|in:boolean,value,static',
+            'true_value' => 'nullable|string',
+            'false_value' => 'nullable|string',
         ]);
+        $validatedData['image'] = $destinationPath . '/' . $fileName;
 
         try {
             ActivityType::create($validatedData);
@@ -37,19 +44,27 @@ class ActivityTypeController extends Controller
 
     public function edit(Request $request)
     {
-        $activityType = ActivityType::find($request->id);
+        try {
         $validatedData = $request->validate([
             'name' => 'required|string',
             'description' => 'nullable|string',
-            'type' => 'required|string|in:boolean,value,static'
         ]);
+        $file = $request->file('file');
+        if($file) {
+            $destinationPath = 'activity_types/files';
+            $fileName = time() . '_' . $file->getClientOriginalName();
+            $file->move($destinationPath, $fileName);
+            $validatedData['image'] = $destinationPath . '/' . $fileName;
+        }
+        $activityType = ActivityType::find($request->id);
 
-        try {
+
+
             $activityType->update($validatedData);
             return back()->with('success', 'Activity type has been updated');
         } catch (\Exception $e) {
             Log::error($e->getMessage());
-            return back()->with('error', 'Failed to update activity type');
+            return back()->with('error', 'Failed to update activity type'.$e->getMessage());
         }
     }
 
