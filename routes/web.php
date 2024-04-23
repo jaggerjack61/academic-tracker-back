@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ActivityTypeController;
+use App\Http\Controllers\ChangePasswordController;
 use App\Http\Controllers\ClassController;
 use App\Http\Controllers\GradeController;
 use App\Http\Controllers\HomeController;
@@ -29,42 +30,64 @@ use Illuminate\Support\Facades\Route;
 //Route::get('/', function () {
 //    return view('welcome');
 //});
-
+Route::get('/logout', function () {
+    Auth::logout();
+    return redirect('/');
+})->name('logout-route');
 
 
 Route::middleware('auth')->group(function () {
+    Route::middleware('role:teacher|admin')->group(function () {
 
-    Route::controller(MainController::class)->group(function () {
-        Route::get('/', 'showDashboard')->name('show-dashboard');
-    });
+        Route::controller(MainController::class)->group(function () {
+            Route::get('/', 'showDashboard')->name('show-dashboard');
+        });
 
-    Route::controller(ClassController::class)->group(function () {
-        Route::prefix('classes')->group(function () {
-            Route::get('/', 'showClasses')->name('show-classes');
-            Route::get('view/{course}', 'view')->name('view-class');
-            Route::get('view/activity/{activity}', 'viewActivity')->name('view-class-activity');
-            Route::post('/', 'create')->name('create-class');
-            Route::patch('/', 'edit')->name('edit-class');
-            Route::get('status/{course}', 'toggle')->name('toggle-class-status');
-            Route::post('/enroll-class', 'enroll')->name('enroll-class');
-            Route::post('/copy-class', 'copy')->name('copy-class');
-            Route::post('/move-class', 'move')->name('move-class');
-            Route::post('activities/add', 'addActivity')->name('add-class-activity');
-            Route::post('activities/log/add', 'addActivityLog')->name('add-class-activity-log');
-            Route::get('activities/{course}', 'viewActivities')->name('view-class-activities');
+        Route::controller(ChangePasswordController::class)->group(function () {
+           Route::prefix('change-password')->group(function () {
+               Route::get('/', 'show')->name('show-change-password');
+               Route::post('/', 'change')->name('change-password');
+           });
+        });
 
+        Route::controller(ClassController::class)->group(function () {
+            Route::prefix('classes')->group(function () {
+                Route::get('/', 'showClasses')->name('show-classes');
+                Route::get('view/{course}', 'view')->name('view-class');
+                Route::get('view/activity/{activity}', 'viewActivity')->name('view-class-activity');
+                Route::post('/', 'create')->name('create-class');
+                Route::patch('/', 'edit')->name('edit-class');
+                Route::get('status/{course}', 'toggle')->name('toggle-class-status');
+                Route::post('/enroll-class', 'enroll')->name('enroll-class');
+                Route::post('/copy-class', 'copy')->name('copy-class');
+                Route::post('/move-class', 'move')->name('move-class');
+                Route::post('activities/add', 'addActivity')->name('add-class-activity');
+                Route::post('activities/log/add', 'addActivityLog')->name('add-class-activity-log');
+                Route::get('activities/{course}', 'viewActivities')->name('view-class-activities');
+
+            });
+        });
+
+        Route::controller(StudentController::class)->group(function () {
+            Route::prefix('students')->group(function () {
+                Route::get('/', 'showStudents')->name('show-students');
+                Route::get('view/{student}', 'view')->name('view-student');
+                Route::post('enroll', 'enroll')->name('enroll-student');
+                Route::get('unroll/{student}/{class}', 'unenroll')->name('unenroll-student');
+                Route::get('activities', 'viewActivities')->name('view-student-activities');
+            });
+        });
+
+        Route::controller(ParentController::class)->group(function () {
+            Route::prefix('parents')->group(function () {
+                Route::get('/', 'show')->name('show-parents');
+                Route::get('view/{parent}', 'view')->name('view-parent');
+                Route::post('view/add/relationship', 'addRelationship')->name('add-relationship');
+                Route::get('view/remove/{relationship}', 'removeRelationship')->name('remove-relationship');
+            });
         });
     });
 
-    Route::controller(StudentController::class)->group(function () {
-        Route::prefix('students')->group(function () {
-            Route::get('/', 'showStudents')->name('show-students');
-            Route::get('view/{student}', 'view')->name('view-student');
-            Route::post('enroll', 'enroll')->name('enroll-student');
-            Route::get('unroll/{student}/{class}', 'unenroll')->name('unenroll-student');
-            Route::get('activities', 'viewActivities')->name('view-student-activities');
-        });
-    });
 
 
     Route::middleware('role:admin')->group(function () {
@@ -77,14 +100,6 @@ Route::middleware('auth')->group(function () {
             Route::prefix('teachers')->group(function () {
                 Route::get('/', 'show')->name('show-teachers');
                 Route::get('view/{teacher}', 'view')->name('view-teacher');
-            });
-        });
-        Route::controller(ParentController::class)->group(function () {
-            Route::prefix('parents')->group(function () {
-                Route::get('/', 'show')->name('show-parents');
-                Route::get('view/{parent}', 'view')->name('view-parent');
-                Route::post('view/add/relationship', 'addRelationship')->name('add-relationship');
-                Route::get('view/remove/{relationship}', 'removeRelationship')->name('remove-relationship');
             });
         });
 
@@ -146,7 +161,7 @@ Auth::routes(
     [
         'login'    => true,
         'logout'   => true,
-        'register' => true,
+        'register' => false,
         'reset'    => true,   // for resetting passwords
         'confirm'  => false,  // for additional password confirmations
         'verify'   => false,  // for email verification

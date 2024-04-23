@@ -7,11 +7,12 @@
 @section('content')
     <div class="card">
         <h5 class="card-header">Activity Types</h5>
-        <div class="table-responsive text-nowrap">
+        <div class="table-responsive text-wrap">
+            <a class="btn btn-sm btn-info mx-3 text-white" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Add
+                New</a>
             <table class="table">
                 <thead>
-                <a class="btn btn-sm btn-info mx-3 text-white" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Add
-                    New</a>
+
                 <tr>
                     <th>Name</th>
                     <th>Description</th>
@@ -24,14 +25,14 @@
                 <tbody class="table-border-bottom-0">
                 @foreach($activityTypes as $activityType)
                     <tr>
-                        <td><i class="fab fa-angular fa-lg text-danger me-3"></i> <strong>{{$activityType->name}}</strong></td>
+                        <td  class="text-nowrap"><i class="fab fa-angular fa-lg text-danger me-3"></i> <strong>{{$activityType->name}}</strong></td>
                         <td>{{$activityType->description}}</td>
-                        <td>{{$activityType->type =='boolean' ? 'binary' : ''}}{{$activityType->type =='value' ? 'score' : ''}}{{$activityType->type =='static' ? 'static' : ''}}
+                        <td class="text-nowrap">{{$activityType->type =='boolean' ? 'binary' : ''}}{{$activityType->type =='value' ? 'score' : ''}}{{$activityType->type =='static' ? 'static' : ''}}
                             {{$activityType->type =='boolean' ?$activityType->true_value.'|'.$activityType->false_value :''}}
                             </td>
                             <td><img class="rounded" src="/{{$activityType->image}}" style="width:50px" alt="icon"/></td>
                         <td>{{$activityType->is_active ? 'Active' : 'Inactive'}}</td>
-                        <td>
+                        <td class="text-nowrap">
                         <span>
                             @if($activityType->is_active)
                                 <a href="{{route('toggle-activity-type-status',$activityType->id)}}"

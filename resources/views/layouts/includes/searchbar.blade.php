@@ -42,34 +42,34 @@
                     <li>
                         <div class="dropdown-divider"></div>
                     </li>
-{{--                    <li>--}}
-{{--                        <a class="dropdown-item" href="#">--}}
-{{--                            <i class="bx bx-user me-2"></i>--}}
-{{--                            <span class="align-middle">My Profile</span>--}}
-{{--                        </a>--}}
-{{--                    </li>--}}
-{{--                    <li>--}}
-                        <a class="dropdown-item" href="#">
-                            <i class="bx bx-cog me-2"></i>
-                            <span class="align-middle">Settings</span>
-                        </a>
-                    </li>
-
-{{--                    <li>--}}
-                        <div class="dropdown-divider"></div>
-                    </li>
-                    <li>
-
-                            <form action="{{route('logout')}}" method="post">
-                                @csrf
-                                <input type="hidden" value="True" name="logout" />
-                            <button type="submit" class="btn align-middle">Log Out</button>
-                            </form>
-
-                    </li>
-                </ul>
+                    {{--                    <li>--}}
+                    {{--                        <a class="dropdown-item" href="#">--}}
+                    {{--                            <i class="bx bx-user me-2"></i>--}}
+                    {{--                            <span class="align-middle">My Profile</span>--}}
+                    {{--                        </a>--}}
+                    {{--                    </li>--}}
+                    {{--                    <li>--}}
+                    <a class="dropdown-item" href="{{route('show-change-password')}}">
+                        <i class="bx bx-cog me-2"></i>
+                        <span class="align-middle">Settings</span>
+                    </a>
             </li>
-            <!--/ User -->
+
+            {{--                    <li>--}}
+            <div class="dropdown-divider"></div>
+            </li>
+            <li>
+
+                <form action="{{route('logout')}}" method="post">
+                    @csrf
+                    <input type="hidden" value="True" name="logout"/>
+                    <button type="submit" class="btn align-middle">Log Out</button>
+                </form>
+
+            </li>
+        </ul>
+        </li>
+        <!--/ User -->
         </ul>
     </div>
 </nav>
