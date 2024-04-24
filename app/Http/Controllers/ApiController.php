@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ActivityLog;
 use App\Models\Course;
 use App\Models\Student;
 use Illuminate\Http\Request;
@@ -33,5 +34,21 @@ class ApiController extends Controller
             ->get();
 //        $clases = Course::with('activities','students.student')->get();
         return response()->json(['data' =>$student,'message' =>'student'], 200);
+    }
+
+    public function studentUpload(Request $request)
+    {
+
+        $file = $request->file('file');
+        if($file) {
+            $destinationPath = 'students-files/' . $request->student_id . '/uploads';
+            $fileName = time() . '_' . $file->getClientOriginalName();
+            $file->move($destinationPath, $fileName);
+            ActivityLog::where('id', $request->log_id)->update(['file' => $destinationPath . '/' . $fileName]);
+            return response()->json(['uri' => $destinationPath . '/' . $fileName, 'message' => 'success'], 200);
+        }
+        else{
+            return response()->json(['message' => 'failed'], 405);
+        }
     }
 }
