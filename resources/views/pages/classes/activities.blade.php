@@ -41,6 +41,7 @@
                                 <th>Out of</th>
                                 <th>File</th>
                                 <th>Due Date</th>
+                                <th>Created Date</th>
                                 <th>Status</th>
                                 <th>Action</th>
 
@@ -60,6 +61,7 @@
                                             @endif
                                         </td>
                                         <td>{{$activity->due_date?:'No due date'}}</td>
+                                        <td>{{substr($activity->created_at, 0, 10)}}</td>
                                         <td>{{$activity->is_active?'Active':'Inactive'}}</td>
                                         <td>
                                             <span>

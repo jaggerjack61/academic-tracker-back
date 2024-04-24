@@ -41,6 +41,28 @@
             var chart = new google.visualization.LineChart(document.getElementById('chart_div2'));
             chart.draw(data, options);
         }
+
+        // google.charts.load('current', {'packages':['corechart']});
+        google.charts.setOnLoadCallback(drawChart4);
+
+        function drawChart4() {
+            var data = new google.visualization.DataTable();
+            data.addColumn('string', 'Date');
+            data.addColumn('number', 'Absences');
+
+{{--            {{dd($absences)}}--}}
+            @foreach($absences as $absence)
+            data.addRow(['{{substr($absence->created_at, 5, 5)}}', {{$absence->absences}}]);
+            @endforeach
+            var options = {
+                // title: 'Absences in the Past Month',
+                hAxis: {title: 'Date'},
+                vAxis: {title: 'Number of Absences'},
+            };
+
+            var chart = new google.visualization.ColumnChart(document.getElementById('chart_div4'));
+            chart.draw(data, options);
+        }
     </script>
     <script type="text/javascript">
         // Load the Visualization API and the corechart package
@@ -242,17 +264,23 @@
                             <div>
                                 <small class="text-muted d-block">Total Absences</small>
                                 <div class="d-flex align-items-center">
-                                    <h6 class="mb-0 me-1">459</h6>
+                                    <h6 class="mb-0 me-1">{{$this_week}}</h6>
 
                                 </div>
                             </div>
                         </div>
-                        <div id="chart_div2" style="width: 100%"></div>
+                        <div id="chart_div4" style="width: 100%"></div>
                         <div class="d-flex justify-content-center pt-4 gap-2">
 
                             <div>
-                                <p class="mb-n1 mt-1">Absences This Week</p>
-                                <small class="text-muted">39 less than last week</small>
+                                <p class="mb-n1 mt-1">Absences over the last 5 days</p>
+                                @if($this_week>$prev_week)
+                                <small class="text-muted">{{$this_week - $prev_week}} more than last week</small>
+                                @elseif($prev_week>$this_week)
+                                    <small class="text-muted">{{$prev_week - $this_week}} less than last week</small>
+                                @elseif($prev_week == $this_week)
+                                    <small class="text-muted">No change since last week</small>
+                                @endif
                             </div>
                         </div>
                     </div>

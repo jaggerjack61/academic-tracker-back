@@ -74,7 +74,7 @@ Route::middleware('auth')->group(function () {
                 Route::get('view/{student}', 'view')->name('view-student');
                 Route::post('enroll', 'enroll')->name('enroll-student');
                 Route::get('unroll/{student}/{class}', 'unenroll')->name('unenroll-student');
-                Route::get('activities', 'viewActivities')->name('view-student-activities');
+                Route::get('activities/{student}/{course}', 'viewActivities')->name('view-student-activities');
             });
         });
 

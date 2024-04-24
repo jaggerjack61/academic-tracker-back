@@ -73,7 +73,7 @@
                                 <td>
                         <span>
                             <a class="btn btn-sm btn-secondary text-white"
-                               href="{{route('view-student-activities',['class' => $class->id, 'student' => $student->student_id])}}">View</a>
+                               href="{{route('view-student-activities',['course' => $class->id, 'student' => $student->student_id])}}">View</a>
                             <a class="btn btn-sm btn-danger text-white"
                                href="{{route('unenroll-student',['class' => $class->id, 'student' => $student->student_id])}}">Un-enroll</a>
                         </span>

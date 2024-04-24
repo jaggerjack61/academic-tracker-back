@@ -222,44 +222,53 @@ class ClassController extends Controller
     public function addActivity(Request $request)
     {
 
-        try{
-        $term = $this->getTermForToday();
-        if(!$term){
-            return back()->with('error', 'There is currently no active term for your activity. Please go add a new term in your settings.');
-        }
+        try {
+            $term = $this->getTermForToday();
+            if (!$term) {
+                return back()->with('error', 'There is currently no active term for your activity. Please go add a new term in your settings.');
+            }
 
-        $file = $request->file('file');
-        if ($file) {
-            $destinationPath = 'class/files';
-            $fileName = time() . '_' . $file->getClientOriginalName();
-            $file->move($destinationPath, $fileName);
-            $activity = new Activity();
-            $activity->activity_type_id = $request->activity_type_id;
-            $activity->teacher_id = $request->teacher_id;
-            $activity->course_id = $request->course_id;
-            $activity->name = $request->name;
-            $activity->note = $request->note;
-            $activity->total = $request->total;
-            $activity->due_date = $request->due_date;
-            $activity->term_id = $term->id;
-            $activity->file = $destinationPath . '/' . $fileName;
-            $activity->save();
+            $file = $request->file('file');
+            if ($file) {
+                $destinationPath = 'class/files';
+                $fileName = time() . '_' . $file->getClientOriginalName();
+                $file->move($destinationPath, $fileName);
+                $activity = new Activity();
+                $activity->activity_type_id = $request->activity_type_id;
+                $activity->teacher_id = $request->teacher_id;
+                $activity->course_id = $request->course_id;
+                $activity->name = $request->name;
+                $activity->note = $request->note;
+                $activity->total = $request->total;
+                $activity->due_date = $request->due_date;
+                $activity->term_id = $term->id;
+                $activity->file = $destinationPath . '/' . $fileName;
+                $activity->save();
 
-        } else {
+            } else {
 
-            $activity = new Activity();
-            $activity->activity_type_id = $request->activity_type_id;
-            $activity->teacher_id = $request->teacher_id;
-            $activity->course_id = $request->course_id;
-            $activity->name = $request->name;
-            $activity->note = $request->note;
-            $activity->total = $request->total;
-            $activity->due_date = $request->due_date;
-            $activity->term_id = $term->id;
-            $activity->save();
-        }
+                $activity = new Activity();
+                $activity->activity_type_id = $request->activity_type_id;
+                $activity->teacher_id = $request->teacher_id;
+                $activity->course_id = $request->course_id;
+                $activity->name = $request->name;
+                $activity->note = $request->note;
+                $activity->total = $request->total;
+                $activity->due_date = $request->due_date;
+                $activity->term_id = $term->id;
+                $activity->save();
+            }
 
-        return back()->with('success', 'Activity has been created');
+            // Initialize activity logs for enrolled students
+            $enrolledStudents = CourseStudent::where('course_id', $request->course_id)->where('is_active', true)->get();
+            foreach ($enrolledStudents as $student) {
+                $activityLog = new ActivityLog();
+                $activityLog->student_id = $student->student_id;
+                $activityLog->activity_id = $activity->id;
+                $activityLog->save();
+            }
+
+            return back()->with('success', 'Activity has been created and activity logs initialized for enrolled students');
         } catch (\Exception $e) {
             return back()->with('error', $e->getMessage());
         }
@@ -382,6 +391,18 @@ class ClassController extends Controller
         } catch (\Exception $e) {
             return back()->with('error', $e->getMessage());
         }
+    }
+
+    public function viewStudentActivities(Student $student,Course $course)
+    {
+        $logs = ActivityLog::where('student_id', $student->id)
+            ->whereHas('activity', function ($query) use ($course) {
+                $query->where('course_id', $course->id);
+            })
+            ->get();
+        $activityTypes = ActivityType::where('is_active', true)->get();
+        $first = ActivityType::where('is_active', true)->first()->id;
+        return view('pages.students.activities', compact( 'student', 'course', 'activityTypes','first'));
     }
 
 

@@ -7,198 +7,165 @@
 @section('content')
     <div class="card">
         <h5 class="card-header">Activities</h5>
+        <span>
+            <a data-bs-toggle="modal" data-bs-target="#staticBackdrop" class="btn btn-sm btn-success text-white m-3">New Activity</a>
+        </span>
+
         <nav>
             <div class="nav nav-tabs flex-row" id="nav-tab" role="tablist">
+                @foreach($activityTypes as $type)
+                    <button class="btn btn-sm btn-primary mx-1 ms-3 {{$type->id == $first?'active':''}}"
+                            id="nav-home-tab{{$type->id}}"
+                            data-bs-toggle="tab" data-bs-target="#nav-home{{$type->id}}"
+                            type="button" role="tab" aria-controls="nav-home{{$type->id}}"
+                            aria-selected="{{$type->id == $first?'true':'false'}}">{{$type->name}}
+                    </button>
+                @endforeach
 
-                    <button class="btn btn-sm btn-primary mx-1 ms-3 active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home"
-                            type="button" role="tab" aria-controls="nav-home" aria-selected="true">Attendance
-                    </button>
-                    <button class="btn btn-sm btn-primary mx-1" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile"
-                            type="button" role="tab" aria-controls="nav-profile" aria-selected="false">Classwork
-                    </button>
-                    <button class="btn btn-sm btn-primary mx-1" id="nav-contact-tab" data-bs-toggle="tab" data-bs-target="#nav-contact"
-                            type="button" role="tab" aria-controls="nav-contact" aria-selected="false">Homework
-                    </button>
-                <button class="btn btn-sm btn-primary mx-1" id="nav-contact-tab" data-bs-toggle="tab" data-bs-target="#nav-tests"
-                        type="button" role="tab" aria-controls="nav-contact" aria-selected="false">Tests
-                </button>
 
             </div>
         </nav>
         <div class="tab-content" id="nav-tabContent">
 
-{{--            Attendance--}}
-            <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+            {{--            Attendance--}}
+            @foreach($activityTypes as $type)
+                <div class="tab-pane fade show {{$type->id == $first?'active':''}}" id="nav-home{{$type->id}}"
+                     role="tabpanel" aria-labelledby="nav-home-tab{{$type->id}}">
 
-                <div class="table-responsive text-nowrap">
-                    <table class="table">
-                        <thead>
-                        <tr>
-                            <th>Date</th>
-                            <th>Status</th>
-                            <th>Action</th>
+                    <div class="table-responsive text-wrap">
+                        @if($type->type == 'value')
+                            <table class="table">
+                                <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Note</th>
+                                    <th>Mark</th>
+                                    <th>Total</th>
+                                    <th>File</th>
+                                    <th>Due Date</th>
+                                    <th>Action</th>
 
-                        </tr>
-                        </thead>
-                        <tbody class="table-border-bottom-0">
-                        <tr>
-                            <td>01/01/2023</td>
-                            <td><span class="badge bg-label-primary me-1">Present</span></td>
-                            <td>
-                        <span>
-                            <a class="btn btn-sm btn-success text-white">Mark Present</a>
-                            <a class="btn btn-sm btn-danger text-white">Mark Absent</a>
-                        </span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>02/01/2023</td>
-                            <td><span class="badge bg-label-primary me-1">Present</span></td>
-                            <td>
-                        <span>
-                            <a class="btn btn-sm btn-success text-white">Mark Present</a>
-                            <a class="btn btn-sm btn-danger text-white">Mark Absent</a>
-                        </span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>03/01/2023</td>
-                            <td><span class="badge bg-label-danger me-1">Absent</span></td>
-                            <td>
-                        <span>
-                            <a class="btn btn-sm btn-success text-white">Mark Present</a>
-                            <a class="btn btn-sm btn-danger text-white">Mark Absent</a>
-                        </span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>04/01/2023</td>
-                            <td><span class="badge bg-label-primary me-1">Present</span></td>
-                            <td>
-                        <span>
-                            <a class="btn btn-sm btn-success text-white">Mark Present</a>
-                            <a class="btn btn-sm btn-danger text-white">Mark Absent</a>
-                        </span>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {{--                            {{dd($logs)}}--}}
+                                @foreach($logs as $activity)
+                                    @if($type->id == $activity->activity->type->id)
+                                        <tr>
+                                            <td>{{$activity->activity->name}}</td>
+                                            <td class="text-wrap">{{optional($activity->activity)->note}}</td>
+                                            <td>{{$activity->score}}</td>
+                                            <td>{{optional($activity->activity)->total}}</td>
+                                            <td>@if($activity->file)
+                                                    <a class="btn btn-sm btn-success" href="/{{$activity->file}}">Download</a>
+                                                @else
+                                                    No File
+                                                @endif
+                                            </td>
+                                            <td>{{optional($activity->activity)->due_date?:'No due date'}}</td>
+                                            <td>
+                                            <span>
+                                                <a class="btn btn-sm btn-primary mb-1 text-white">View Class</a>
+{{--                                                @if($activity->type->type != 'static')--}}
+                                                {{--                                                    <a href="{{route('view-class-activity', ['activity' => $activity->id])}}" class="btn btn-sm mb-1 btn-secondary text-white">View</a>--}}
+
+                                                {{--                                                @endif--}}
+                                            </span>
+                                            </td>
+                                        </tr>
+                                    @endif
+                                @endforeach
+                                </tbody>
+                            </table>
+                        @elseif($type->type == 'boolean')
+                            <table class="table">
+                                <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Note</th>
+                                    <th>Status</th>
+                                    <th>File</th>
+                                    <th>Due Date</th>
+                                    <th>Action</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {{--                            {{dd($logs)}}--}}
+                                @foreach($logs as $activity)
+                                    @if($type->id == $activity->activity->type->id)
+                                        <tr>
+                                            <td>{{$activity->activity->name}}</td>
+                                            <td class="text-wrap">{{optional($activity->activity)->note}}</td>
+                                            <td>{{$activity->score == 1?$activity->activity->type->false_value:''}}
+                                                {{$activity->score == 2?$activity->activity->type->true_value:''}}</td>
+                                            <td>@if($activity->file)
+                                                    <a class="btn btn-sm btn-success" href="/{{$activity->file}}">Download</a>
+                                                @else
+                                                    No File
+                                                @endif
+                                            </td>
+                                            <td>{{optional($activity->activity)->due_date?:'No due date'}}</td>
+                                            <td>
+                                            <span>
+                                                <a class="btn btn-sm btn-primary mb-1 text-white">View Class</a>
+{{--                                                @if($activity->type->type != 'static')--}}
+                                                {{--                                                    <a href="{{route('view-class-activity', ['activity' => $activity->id])}}" class="btn btn-sm mb-1 btn-secondary text-white">View</a>--}}
+
+                                                {{--                                                @endif--}}
+                                            </span>
+                                            </td>
+                                        </tr>
+                                    @endif
+                                @endforeach
+                                </tbody>
+                            </table>
+                        @elseif($type->type == 'static')
+                            <table class="table">
+                                <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Note</th>
+                                    <th>File</th>
+                                    <th>Due Date</th>
+                                    <th>Action</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {{--                            {{dd($logs)}}--}}
+                                @foreach($logs as $activity)
+                                    @if($type->id == $activity->activity->type->id)
+                                        <tr>
+                                            <td>{{$activity->activity->name}}</td>
+                                            <td class="text-wrap">{{optional($activity->activity)->note}}</td>
+
+                                            <td>@if($activity->file)
+                                                    <a class="btn btn-sm btn-success" href="/{{$activity->file}}">Download</a>
+                                                @else
+                                                    No File
+                                                @endif
+                                            </td>
+                                            <td>{{optional($activity->activity)->due_date?:'No due date'}}</td>
+                                            <td>
+                                            <span>
+                                                <a class="btn btn-sm btn-primary mb-1 text-white">View Class</a>
+{{--                                                @if($activity->type->type != 'static')--}}
+                                                {{--                                                    <a href="{{route('view-class-activity', ['activity' => $activity->id])}}" class="btn btn-sm mb-1 btn-secondary text-white">View</a>--}}
+
+                                                {{--                                                @endif--}}
+                                            </span>
+                                            </td>
+                                        </tr>
+                                    @endif
+                                @endforeach
+                                </tbody>
+                            </table>
+                        @endif
+                    </div>
                 </div>
-            </div>
+            @endforeach
 
-{{--            Classwork--}}
-            <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
-                <div class="table-responsive text-nowrap">
-                    <table class="table">
-                        <thead>
-                        <tr>
-                            <th>Date</th>
-                            <th>Name</th>
-                            <th>Mark</th>
-                            <th>Action</th>
-
-                        </tr>
-                        </thead>
-                        <tbody class="table-border-bottom-0">
-                        <tr>
-                            <td>01/01/2023</td>
-                            <td>Differential Equations Exercise</td>
-                            <td><span class="badge bg-label-primary me-1">15/25</span></td>
-                            <td>
-                        <span>
-                            <a class="btn btn-sm btn-primary text-white">Edit</a>
-                        </span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>04/01/2023</td>
-                            <td>Integral Equations Exercise</td>
-                            <td><span class="badge bg-label-danger me-1">11/25</span></td>
-                            <td>
-                        <span>
-                            <a class="btn btn-sm btn-primary text-white">Edit</a>
-                        </span>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-
-            </div>
-
-{{--            Homework--}}
-            <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">
-                <div class="table-responsive text-nowrap">
-                    <table class="table">
-                        <thead>
-                        <tr>
-                            <th>Date</th>
-                            <th>Name</th>
-                            <th>Mark</th>
-                            <th>Action</th>
-
-                        </tr>
-                        </thead>
-                        <tbody class="table-border-bottom-0">
-                        <tr>
-                            <td>02/01/2023</td>
-                            <td>Differentiation</td>
-                            <td><span class="badge bg-label-primary me-1">19/20</span></td>
-                            <td>
-                        <span>
-                            <a class="btn btn-sm btn-primary text-white">Edit</a>
-                        </span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>03/01/2023</td>
-                            <td>Integration</td>
-                            <td><span class="badge bg-label-danger me-1">09/20</span></td>
-                            <td>
-                        <span>
-                            <a class="btn btn-sm btn-primary text-white">Edit</a>
-                        </span>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-
-            </div>
-
-{{--            Tests--}}
-            <div class="tab-pane fade" id="nav-tests" role="tabpanel" aria-labelledby="nav-tests-tab">
-                <div class="table-responsive text-nowrap">
-                    <table class="table">
-                        <thead>
-                        <tr>
-                            <th>Date</th>
-                            <th>Name</th>
-                            <th>Mark</th>
-                            <th>Action</th>
-
-                        </tr>
-                        </thead>
-                        <tbody class="table-border-bottom-0">
-                        <tr>
-                            <td>02/01/2023</td>
-                            <td>Differentiation & Integration Test 1</td>
-                            <td><span class="badge bg-label-primary me-1">37/50</span></td>
-                            <td>
-                        <span>
-                            <a class="btn btn-sm btn-primary text-white">Edit</a>
-                        </span>
-                            </td>
-                        </tr>
-
-                        </tbody>
-                    </table>
-                </div>
-
-            </div>
         </div>
     </div>
-
 
 
     <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
