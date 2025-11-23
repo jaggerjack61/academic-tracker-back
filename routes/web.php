@@ -9,6 +9,7 @@ use App\Http\Controllers\MainController;
 use App\Http\Controllers\ParentController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\StudentController;
+use App\Http\Controllers\StudentDashboardController;
 use App\Http\Controllers\SubjectController;
 use App\Http\Controllers\TeacherController;
 use App\Http\Controllers\TermController;
@@ -88,6 +89,16 @@ Route::middleware('auth')->group(function () {
         });
     });
 
+
+
+    Route::middleware('role:student')->group(function () {
+        Route::controller(StudentDashboardController::class)->group(function () {
+            Route::prefix('student')->group(function () {
+                Route::get('dashboard', 'showDashboard')->name('student-dashboard');
+                Route::get('courses/{course}/assignments', 'showAssignments')->name('student-assignments');
+            });
+        });
+    });
 
 
     Route::middleware('role:admin')->group(function () {

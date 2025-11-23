@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\ActivityLog;
 use App\Models\Course;
 use App\Models\Student;
+use App\Models\StudentParent;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -18,7 +19,7 @@ class ApiController extends Controller
         if (Auth::attempt(['email'=>$request->credentials['email'],'password'=>$request->credentials['password']])) {
             auth()->user()->tokens()->delete();
             $token = $request->user()->createToken('authToken')->plainTextToken;
-            return response()->json(['token' => $token,'user'=>auth()->user(),'message' =>'success']);
+            return response()->json(['token' => $token,'user'=>auth()->user(),'message' =>auth()->user()->role->name]);
         }
 
         return response()->json(['message' => 'unauthorized'], 401);
@@ -34,6 +35,14 @@ class ApiController extends Controller
             ->get();
 //        $clases = Course::with('activities','students.student')->get();
         return response()->json(['data' =>$student,'message' =>'student'], 200);
+    }
+
+    public function getStudents()
+    {
+        $parent = StudentParent::where('user_id', auth()->user()->id)
+            ->with('relationships.student.courses.course.grade','relationships.student.courses.course.subject','relationships.student.courses.course.activities.logs','relationships.student.courses.course.activities.type')
+            ->get();
+        return response()->json(['data' =>$parent,'message' =>'parent'], 200);
     }
 
     public function studentUpload(Request $request)

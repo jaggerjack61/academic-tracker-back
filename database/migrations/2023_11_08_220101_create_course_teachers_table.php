@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('course_teachers', function (Blueprint $table) {
             $table->id();
-            $table->string('course_id');
-            $table->string('teacher_id');
+            $table->integer('course_id');
+            $table->integer('teacher_id');
             $table->boolean('is_active')->default(true);
             $table->timestamps();
         });

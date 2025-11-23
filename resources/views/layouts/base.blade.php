@@ -61,7 +61,7 @@
 
         <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
             <div class="app-brand demo">
-                <a href="{{route('show-dashboard')}}" class="app-brand-link">
+                <a href="{{ Auth::user()->role->name === 'student' ? route('student-dashboard') : route('show-dashboard') }}" class="app-brand-link">
               <span class="app-brand-logo demo">
                 <svg
                     width="25"
@@ -120,7 +120,7 @@
                     <span class="demo menu-text fw-bolder ms-2">{{ config('app.name', 'Laravel') }}</span>
                 </a>
 
-                <a href="{{route('show-dashboard')}}" class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">
+                <a href="{{ Auth::user()->role->name === 'student' ? route('student-dashboard') : route('show-dashboard') }}" class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">
                     <i class="bx bx-chevron-left bx-sm align-middle"></i>
                 </a>
             </div>
@@ -128,78 +128,88 @@
             <div class="menu-inner-shadow"></div>
 
             <ul class="menu-inner py-1">
-                <!-- Dashboard -->
-                <li class="menu-item  {{Route::currentRouteName() == 'show-dashboard' ? 'active':''}}">
-                    <a href="{{route('show-dashboard')}}" class="menu-link">
-                        <i class="menu-icon tf-icons bx bx-home-circle"></i>
-                        <div data-i18n="Analytics">Dashboard</div>
-                    </a>
-                </li>
-                <li class="menu-item {{Route::currentRouteName() == 'show-students' || Route::currentRouteName() == 'view-student' || Route::currentRouteName() == 'view-activities' ? 'active':''}}">
-                    <a href="{{route('show-students')}}" class="menu-link">
-                        <i class="menu-icon tf-icons bx bx-user"></i>
-                        <div data-i18n="Analytics">Students</div>
-                    </a>
-                </li>
-                <li class="menu-item {{Route::currentRouteName() == 'show-parents' || Route::currentRouteName() == 'view-parent' ? 'active':''}}">
-                    <a href="{{route('show-parents')}}" class="menu-link">
-                        <i class="menu-icon tf-icons bx bxs-user-voice"></i>
-                        <div data-i18n="Account">Parents</div>
-                    </a>
-                </li>
-                <li class="menu-item {{Route::currentRouteName() == 'show-teachers' || Route::currentRouteName() == 'view-teacher' ? 'active':''}}">
-                    <a href="{{route('show-teachers')}}" class="menu-link">
-                        <i class="menu-icon tf-icons bx bxs-user-rectangle"></i>
-                        <div data-i18n="Account">Teachers</div>
-                    </a>
-                </li>
-                <li class="menu-item {{Route::currentRouteName() == 'show-classes' || Route::currentRouteName() == 'view-class' || Route::currentRouteName() == 'view-class-activities' ? 'active':''}}">
-                    <a href="{{route('show-classes')}}" class="menu-link">
-                        <i class="menu-icon tf-icons bx bx-book"></i>
-                        <div data-i18n="Analytics">Classes</div>
-                    </a>
-                </li>
+                @if(Auth::user()->role->name === 'student')
+                    <!-- Student Dashboard -->
+                    <li class="menu-item {{Route::currentRouteName() == 'student-dashboard' ? 'active':''}}">
+                        <a href="{{route('student-dashboard')}}" class="menu-link">
+                            <i class="menu-icon tf-icons bx bx-home-circle"></i>
+                            <div data-i18n="Analytics">My Dashboard</div>
+                        </a>
+                    </li>
+                @else
+                    <!-- Teacher/Admin Dashboard -->
+                    <li class="menu-item  {{Route::currentRouteName() == 'show-dashboard' ? 'active':''}}">
+                        <a href="{{route('show-dashboard')}}" class="menu-link">
+                            <i class="menu-icon tf-icons bx bx-home-circle"></i>
+                            <div data-i18n="Analytics">Dashboard</div>
+                        </a>
+                    </li>
+                    <li class="menu-item {{Route::currentRouteName() == 'show-students' || Route::currentRouteName() == 'view-student' || Route::currentRouteName() == 'view-activities' ? 'active':''}}">
+                        <a href="{{route('show-students')}}" class="menu-link">
+                            <i class="menu-icon tf-icons bx bx-user"></i>
+                            <div data-i18n="Analytics">Students</div>
+                        </a>
+                    </li>
+                    <li class="menu-item {{Route::currentRouteName() == 'show-parents' || Route::currentRouteName() == 'view-parent' ? 'active':''}}">
+                        <a href="{{route('show-parents')}}" class="menu-link">
+                            <i class="menu-icon tf-icons bx bxs-user-voice"></i>
+                            <div data-i18n="Account">Parents</div>
+                        </a>
+                    </li>
+                    <li class="menu-item {{Route::currentRouteName() == 'show-teachers' || Route::currentRouteName() == 'view-teacher' ? 'active':''}}">
+                        <a href="{{route('show-teachers')}}" class="menu-link">
+                            <i class="menu-icon tf-icons bx bxs-user-rectangle"></i>
+                            <div data-i18n="Account">Teachers</div>
+                        </a>
+                    </li>
+                    <li class="menu-item {{Route::currentRouteName() == 'show-classes' || Route::currentRouteName() == 'view-class' || Route::currentRouteName() == 'view-class-activities' ? 'active':''}}">
+                        <a href="{{route('show-classes')}}" class="menu-link">
+                            <i class="menu-icon tf-icons bx bx-book"></i>
+                            <div data-i18n="Analytics">Classes</div>
+                        </a>
+                    </li>
 
-                <!-- Layouts -->
-
-
-                <li class="menu-item">
-                    <a href="javascript:void(0);" class="menu-link menu-toggle">
-                        <i class="menu-icon tf-icons bx bx-wrench"></i>
-                        <div data-i18n="Account Settings">Settings</div>
-                    </a>
-                    <ul class="menu-sub">
-
-                        <li class="menu-item {{Route::currentRouteName() == 'show-activity-types' ? 'active':''}}">
-                            <a href="{{route('show-activity-types')}}" class="menu-link">
-                                <div data-i18n="Connections">Activity Types</div>
-                            </a>
-                        </li>
-                        <li class="menu-item {{Route::currentRouteName() == 'show-grades' ? 'active':''}}">
-                            <a href="{{route('show-grades')}}" class="menu-link">
-                                <div data-i18n="Connections">Grades</div>
-                            </a>
-                        </li>
-                        <li class="menu-item {{Route::currentRouteName() == 'show-subjects' ? 'active':''}}">
-                            <a href="{{route('show-subjects')}}" class="menu-link">
-                                <div data-i18n="Connections">Subjects</div>
-                            </a>
-                        </li>
-                        <li class="menu-item {{Route::currentRouteName() == 'show-terms' ? 'active':''}}">
-                            <a href="{{route('show-terms')}}" class="menu-link">
-                                <div data-i18n="Connections">Terms</div>
-                            </a>
-                        </li>
-                        <li class="menu-item {{Route::currentRouteName() == 'show-users' ? 'active':''}}">
-                            <a href="{{route('show-users')}}" class="menu-link">
-                                <div data-i18n="Connections">Users</div>
-                            </a>
-                        </li>
+                    <!-- Layouts -->
 
 
+                    <li class="menu-item">
+                        <a href="javascript:void(0);" class="menu-link menu-toggle">
+                            <i class="menu-icon tf-icons bx bx-wrench"></i>
+                            <div data-i18n="Account Settings">Settings</div>
+                        </a>
+                        <ul class="menu-sub">
 
-                    </ul>
-                </li>
+                            <li class="menu-item {{Route::currentRouteName() == 'show-activity-types' ? 'active':''}}">
+                                <a href="{{route('show-activity-types')}}" class="menu-link">
+                                    <div data-i18n="Connections">Activity Types</div>
+                                </a>
+                            </li>
+                            <li class="menu-item {{Route::currentRouteName() == 'show-grades' ? 'active':''}}">
+                                <a href="{{route('show-grades')}}" class="menu-link">
+                                    <div data-i18n="Connections">Grades</div>
+                                </a>
+                            </li>
+                            <li class="menu-item {{Route::currentRouteName() == 'show-subjects' ? 'active':''}}">
+                                <a href="{{route('show-subjects')}}" class="menu-link">
+                                    <div data-i18n="Connections">Subjects</div>
+                                </a>
+                            </li>
+                            <li class="menu-item {{Route::currentRouteName() == 'show-terms' ? 'active':''}}">
+                                <a href="{{route('show-terms')}}" class="menu-link">
+                                    <div data-i18n="Connections">Terms</div>
+                                </a>
+                            </li>
+                            <li class="menu-item {{Route::currentRouteName() == 'show-users' ? 'active':''}}">
+                                <a href="{{route('show-users')}}" class="menu-link">
+                                    <div data-i18n="Connections">Users</div>
+                                </a>
+                            </li>
+
+
+
+                        </ul>
+                    </li>
+                @endif
 {{--                <li class="menu-item">--}}
 {{--                    <a--}}
 {{--                        href="https://themeselection.com/demo/sneat-bootstrap-html-admin-template/documentation/"--}}

@@ -27,6 +27,7 @@ Route::middleware('guest')->group(function () {
 Route::middleware('auth:sanctum')->group(function () {
     Route::controller(ApiController::class)->group(function () {
         Route::get('/classes', 'Classes');
+        Route::get('/students', 'getStudents');
         Route::post('/student-upload', 'studentUpload');
     });
 });

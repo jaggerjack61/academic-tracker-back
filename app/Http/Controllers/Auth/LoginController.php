@@ -29,6 +29,22 @@ class LoginController extends Controller
     protected $redirectTo = RouteServiceProvider::HOME;
 
     /**
+     * The user has been authenticated.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  mixed  $user
+     * @return mixed
+     */
+    protected function authenticated($request, $user)
+    {
+        if ($user->role && $user->role->name === 'student') {
+            return redirect('/student/dashboard');
+        }
+        
+        return redirect($this->redirectTo);
+    }
+
+    /**
      * Create a new controller instance.
      *
      * @return void
@@ -37,4 +53,5 @@ class LoginController extends Controller
     {
         $this->middleware('guest')->except('logout');
     }
+
 }
