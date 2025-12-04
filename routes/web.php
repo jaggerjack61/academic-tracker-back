@@ -28,9 +28,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-//Route::get('/', function () {
-//    return view('welcome');
-//});
+// Public landing page
+Route::get('/', function () {
+    return view('landing');
+})->name('landing');
+
 Route::get('/logout', function () {
     Auth::logout();
     return redirect('/');
@@ -41,7 +43,7 @@ Route::middleware('auth')->group(function () {
     Route::middleware('role:teacher|admin')->group(function () {
 
         Route::controller(MainController::class)->group(function () {
-            Route::get('/', 'showDashboard')->name('show-dashboard');
+            Route::get('/dashboard', 'showDashboard')->name('show-dashboard');
         });
 
         Route::controller(ChangePasswordController::class)->group(function () {
