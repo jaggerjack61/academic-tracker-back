@@ -6,7 +6,7 @@ use App\Models\ActivityLog;
 use App\Models\ActivityType;
 use App\Models\Course;
 use App\Models\CourseStudent;
-use App\Models\Student;
+use App\Models\Profile;
 use Illuminate\Http\Request;
 
 class StudentController extends Controller
@@ -16,7 +16,7 @@ class StudentController extends Controller
         return view('pages.students.index');
     }
 
-    public function view(Student $student)
+    public function view(Profile $student)
     {
         $classes = Course::where('is_active', true)->get();
 
@@ -70,7 +70,7 @@ class StudentController extends Controller
         return $enrolled;
     }
 
-    public function viewActivities(Student $student, Course $course)
+    public function viewActivities(Profile $student, Course $course)
     {
         $logs = ActivityLog::where('student_id', $student->id)
             ->whereHas('activity', function ($query) use ($course) {

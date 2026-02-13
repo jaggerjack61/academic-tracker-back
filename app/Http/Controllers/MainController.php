@@ -4,8 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\ActivityLog;
 use App\Models\Course;
-use App\Models\Student;
-use App\Models\Teacher;
+use App\Models\Profile;
 use Illuminate\Support\Facades\DB;
 
 class MainController extends Controller
@@ -42,9 +41,9 @@ class MainController extends Controller
             ->get();
         //        dd($absences->count(),$prev_week->count());
 
-        $students = Student::where('is_active', true)->orderBy('id', 'desc')->take(8)->get();
-        $studentCount = Student::where('is_active', true)->count();
-        $teachers = Teacher::where('is_active', true)->get();
+        $students = Profile::where('type', 'student')->where('is_active', true)->orderBy('id', 'desc')->take(8)->get();
+        $studentCount = Profile::where('type', 'student')->where('is_active', true)->count();
+        $teachers = Profile::where('type', 'teacher')->where('is_active', true)->get();
         $classes = Course::where('is_active', true)->get();
 
         return view('pages.dashboard', compact('this_week', 'prev_week', 'students', 'teachers', 'studentCount', 'classes', 'absences'));

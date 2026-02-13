@@ -2,23 +2,22 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Profile;
 use App\Models\Relationship;
-use App\Models\Student;
-use App\Models\StudentParent;
 use Illuminate\Http\Request;
 
 class ParentController extends Controller
 {
     public function show()
     {
-        $parents = StudentParent::where('is_active', true)->get();
+        $parents = Profile::where('type', 'parent')->where('is_active', true)->get();
 
         return view('pages.parents.index', compact('parents'));
     }
 
-    public function view(StudentParent $parent)
+    public function view(Profile $parent)
     {
-        $students = Student::where('is_active', true)->get();
+        $students = Profile::where('type', 'student')->where('is_active', true)->get();
 
         return view('pages.parents.view', compact('parent', 'students'));
     }

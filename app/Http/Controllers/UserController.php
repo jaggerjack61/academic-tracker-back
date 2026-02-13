@@ -2,12 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Admin;
+use App\Models\Profile;
 use App\Models\Role;
-use App\Models\Student;
-use App\Models\StudentParent;
-use App\Models\Teacher;
-//use App\Models\Parent;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -45,17 +41,7 @@ class UserController extends Controller
             $user->save();
             $validatedData['user_id'] = $user->id;
             $role = Role::find($validatedData['role_id']);
-            if ($role->name == 'student') {
-                $this->createStudent($validatedData);
-            } elseif ($role->name == 'teacher') {
-                $this->createTeacher($validatedData);
-            } elseif ($role->name == 'parent') {
-                $this->createParent($validatedData);
-            } elseif ($role->name == 'admin') {
-                $this->createAdmin($validatedData);
-            } else {
-                return back()->with('error', 'Invalid role');
-            }
+            $this->createProfile($validatedData, $role?->name);
 
             return back()->with('success', 'User has been created');
         } catch (\Exception $e) {
@@ -89,7 +75,7 @@ class UserController extends Controller
             $name = $this->splitName($validatedData['name']);
             $validatedData['first_name'] = $name[0];
             $validatedData['last_name'] = $name[1];
-            $user->userable->update($validatedData);
+            $user->profile?->update($validatedData);
 
             return back()->with('success', 'User has been updated');
         } catch (\Exception $e) {
@@ -105,8 +91,8 @@ class UserController extends Controller
 
         try {
             $user = User::find($id);
-            $user->userable->is_active = ! $user->userable->is_active;
-            $user->userable->save();
+            $user->profile->is_active = ! $user->profile->is_active;
+            $user->profile->save();
 
             return back()->with('success', 'User status has been updated');
 
@@ -125,56 +111,16 @@ class UserController extends Controller
         return [$firstName, $lastName];
     }
 
-    public function createStudent($data)
+    public function createProfile($data, $type)
     {
+        if (! in_array($type, ['admin', 'teacher', 'student', 'parent'], true)) {
+            throw new \InvalidArgumentException('Invalid role');
+        }
+
         [$firstName, $lastName] = $this->splitName($data['name']);
 
-        Student::create([
-            'first_name' => $firstName,
-            'last_name' => $lastName,
-            'dob' => $data['dob'],
-            'sex' => $data['sex'],
-            'id_number' => $data['id_number'],
-            'phone_number' => $data['phone_number'],
-            'user_id' => $data['user_id'],
-        ]);
-    }
-
-    public function createTeacher($data)
-    {
-        [$firstName, $lastName] = $this->splitName($data['name']);
-
-        Teacher::create([
-            'first_name' => $firstName,
-            'last_name' => $lastName,
-            'dob' => $data['dob'],
-            'sex' => $data['sex'],
-            'id_number' => $data['id_number'],
-            'phone_number' => $data['phone_number'],
-            'user_id' => $data['user_id'],
-        ]);
-    }
-
-    public function createParent($data)
-    {
-        [$firstName, $lastName] = $this->splitName($data['name']);
-
-        StudentParent::create([
-            'first_name' => $firstName,
-            'last_name' => $lastName,
-            'dob' => $data['dob'],
-            'sex' => $data['sex'],
-            'id_number' => $data['id_number'],
-            'phone_number' => $data['phone_number'],
-            'user_id' => $data['user_id'],
-        ]);
-    }
-
-    public function createAdmin($data)
-    {
-        [$firstName, $lastName] = $this->splitName($data['name']);
-
-        Admin::create([
+        Profile::create([
+            'type' => $type,
             'first_name' => $firstName,
             'last_name' => $lastName,
             'dob' => $data['dob'],

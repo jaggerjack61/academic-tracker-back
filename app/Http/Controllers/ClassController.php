@@ -9,9 +9,8 @@ use App\Models\Course;
 use App\Models\CourseStudent;
 use App\Models\CourseTeacher;
 use App\Models\Grade;
-use App\Models\Student;
+use App\Models\Profile;
 use App\Models\Subject;
-use App\Models\Teacher;
 use App\Models\Term;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -31,7 +30,7 @@ class ClassController extends Controller
     {
         $grades = Grade::where('is_active', true)->get();
         $subjects = Subject::where('is_active', true)->get();
-        $teachers = Teacher::where('is_active', true)->get();
+        $teachers = Profile::where('type', 'teacher')->where('is_active', true)->get();
         $classes = Course::paginate(30);
 
         //        $url = $request->path();
@@ -129,8 +128,8 @@ class ClassController extends Controller
     {
         return view('pages.classes.view', [
             'class' => $course,
-            'students' => Student::where('is_active', true)->get(),
-            'teachers' => Teacher::where('is_active', true)->get(),
+            'students' => Profile::where('type', 'student')->where('is_active', true)->get(),
+            'teachers' => Profile::where('type', 'teacher')->where('is_active', true)->get(),
             'classes' => Course::where('is_active', true)->get(),
         ]);
     }
@@ -392,7 +391,7 @@ class ClassController extends Controller
         }
     }
 
-    public function viewStudentActivities(Student $student, Course $course)
+    public function viewStudentActivities(Profile $student, Course $course)
     {
         $logs = ActivityLog::where('student_id', $student->id)
             ->whereHas('activity', function ($query) use ($course) {

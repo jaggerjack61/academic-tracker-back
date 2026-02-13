@@ -13,7 +13,7 @@ class CourseTeacher extends Model
 
     public function teacher()
     {
-        return $this->hasOne(Teacher::class, 'id', 'teacher_id');
+        return $this->hasOne(Profile::class, 'id', 'teacher_id');
     }
 
     public function course()

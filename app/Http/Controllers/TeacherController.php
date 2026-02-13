@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Course;
-use App\Models\Teacher;
+use App\Models\Profile;
 
 class TeacherController extends Controller
 {
@@ -13,7 +13,7 @@ class TeacherController extends Controller
         return view('pages.teachers.index');
     }
 
-    public function view(Teacher $teacher)
+    public function view(Profile $teacher)
     {
         $classes = Course::where('is_active', true)->get();
 

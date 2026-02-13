@@ -14,12 +14,7 @@ class ActivityLog extends Model
 
     public function student(): belongsTo
     {
-        return $this->belongsTo(Student::class);
-    }
-
-    public function teacher(): belongsTo
-    {
-        return $this->belongsTo(Student::class);
+        return $this->belongsTo(Profile::class, 'student_id', 'id');
     }
 
     public function activity()

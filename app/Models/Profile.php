@@ -5,11 +5,16 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Teacher extends Model
+class Profile extends Model
 {
     use HasFactory;
 
     protected $guarded = ['created_at', 'updated_at'];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id', 'id');
+    }
 
     public function getNameAttribute(): string
     {
@@ -18,7 +23,21 @@ class Teacher extends Model
 
     public function courses()
     {
-        return $this->hasMany(CourseTeacher::class, 'teacher_id', 'id')->where('is_active', true);
+        return match ($this->type) {
+            'teacher' => $this->hasMany(CourseTeacher::class, 'teacher_id', 'id')->where('is_active', true),
+            'student' => $this->hasMany(CourseStudent::class, 'student_id', 'id')->where('is_active', true),
+            default => $this->hasMany(CourseStudent::class, 'student_id', 'id')->whereRaw('1 = 0'),
+        };
+    }
+
+    public function relationships()
+    {
+        return $this->hasMany(Relationship::class, 'parent_id', 'id')->where('is_active', true);
+    }
+
+    public function activities()
+    {
+        return $this->hasMany(ActivityLog::class, 'student_id', 'id');
     }
 
     public function search($query, $search)
@@ -29,10 +48,5 @@ class Teacher extends Model
             ->orWhere('id_number', 'LIKE', '%'.$search.'%')
             ->orWhere('dob', 'LIKE', '%'.$search.'%')
             ->orWhere('sex', 'LIKE', '%'.$search.'%');
-    }
-
-    public function user()
-    {
-        return $this->hasOne(User::class, 'id', 'user_id');
     }
 }

@@ -2,7 +2,7 @@
 
 namespace App\Livewire;
 
-use App\Models\Teacher;
+use App\Models\Profile;
 use Livewire\Component;
 
 class TeacherTable extends Component
@@ -14,12 +14,14 @@ class TeacherTable extends Component
     public function render()
     {
         if ($this->search) {
-            $obj = new Teacher();
-            $teachers = $obj->search($obj->query(), $this->search)->paginate($this->paginate);
+            $obj = new Profile();
+            $teachers = $obj->search($obj->query(), $this->search)
+                ->where('type', 'teacher')
+                ->paginate($this->paginate);
 
             return view('livewire.teacher-table', compact('teachers'));
         } else {
-            $teachers = Teacher::paginate($this->paginate);
+            $teachers = Profile::where('type', 'teacher')->paginate($this->paginate);
 
             return view('livewire.teacher-table', compact('teachers'));
 

@@ -41,16 +41,16 @@
                 @foreach($users as $user)
                     <tr>
                         <td><i class="fab fa-angular fa-lg text-danger me-3"></i> <strong>{{$user->name}}</strong></td>
-                        <td>{{$user->userable->dob}}</td>
-                        <td>{{$user->userable->sex}}</td>
-                        <td>{{$user->userable->id_number}}</td>
+                        <td>{{optional($user->profile)->dob}}</td>
+                        <td>{{optional($user->profile)->sex}}</td>
+                        <td>{{optional($user->profile)->id_number}}</td>
                         <td>{{$user->email}}</td>
-                        <td>{{$user->userable->phone_number}}</td>
+                        <td>{{optional($user->profile)->phone_number}}</td>
                         <td>{{$user->role->name}}</td>
-                        <td>{{$user->userable->is_active ? 'Active' : 'Inactive'}}</td>
+                        <td>{{optional($user->profile)->is_active ? 'Active' : 'Inactive'}}</td>
                         <td>
                         <span>
-                            @if($user->userable->is_active)
+                            @if(optional($user->profile)->is_active)
                                 <a href="{{route('toggle-user-status',$user->id)}}"
                                    class="btn btn-sm btn-danger text-white">Deactivate</a>
                             @else
@@ -58,7 +58,7 @@
                                    class="btn btn-sm btn-success text-white">Activate</a>
                             @endif
                             <button type="button" class="btn btn-sm btn-primary text-white" data-bs-toggle="modal" data-bs-target="#editUserModal"
-                                    onclick="editUser({{ $user->id }}, '{{ $user->name }}','{{$user->email}}', '{{$user->userable->phone_number}}', '{{$user->userable->id_number}}', '{{$user->userable->sex}}','{{$user->userable->dob}}')">Edit</button>
+                                    onclick="editUser({{ $user->id }}, '{{ $user->name }}','{{$user->email}}', '{{optional($user->profile)->phone_number}}', '{{optional($user->profile)->id_number}}', '{{optional($user->profile)->sex}}','{{optional($user->profile)->dob}}')">Edit</button>
                         </span>
                         </td>
                     </tr>

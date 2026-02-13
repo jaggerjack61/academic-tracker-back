@@ -4,8 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\ActivityLog;
 use App\Models\Course;
-use App\Models\Student;
-use App\Models\StudentParent;
+use App\Models\Profile;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -29,8 +28,7 @@ class ApiController extends Controller
 
     public function Classes(Request $request)
     {
-        $student = Student::where('user_id', auth()->user()->id
-        )
+        $student = Profile::where('user_id', auth()->user()->id)->where('type', 'student')
             ->with('courses.course.grade', 'courses.course.subject', 'courses.course.activities.logs', 'courses.course.activities.type')
             ->get();
 
@@ -40,7 +38,7 @@ class ApiController extends Controller
 
     public function getStudents()
     {
-        $parent = StudentParent::where('user_id', auth()->user()->id)
+        $parent = Profile::where('user_id', auth()->user()->id)->where('type', 'parent')
             ->with('relationships.student.courses.course.grade', 'relationships.student.courses.course.subject', 'relationships.student.courses.course.activities.logs', 'relationships.student.courses.course.activities.type')
             ->get();
 

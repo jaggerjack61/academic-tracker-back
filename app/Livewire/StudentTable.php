@@ -2,7 +2,7 @@
 
 namespace App\Livewire;
 
-use App\Models\Student;
+use App\Models\Profile;
 use Livewire\Component;
 
 class StudentTable extends Component
@@ -15,12 +15,14 @@ class StudentTable extends Component
     {
 
         if ($this->search) {
-            $obj = new Student();
-            $students = $obj->search($obj->query(), $this->search)->paginate($this->paginate);
+            $obj = new Profile();
+            $students = $obj->search($obj->query(), $this->search)
+                ->where('type', 'student')
+                ->paginate($this->paginate);
 
             return view('livewire.student-table', compact('students'));
         } else {
-            $students = Student::paginate($this->paginate);
+            $students = Profile::where('type', 'student')->paginate($this->paginate);
 
             return view('livewire.student-table', compact('students'));
 

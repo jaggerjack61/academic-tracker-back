@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\ActivityLog;
 use App\Models\ActivityType;
 use App\Models\Course;
-use App\Models\Student;
 use Illuminate\Support\Facades\Auth;
 
 class StudentDashboardController extends Controller

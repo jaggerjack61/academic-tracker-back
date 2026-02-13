@@ -2,7 +2,7 @@
 
 namespace App\Livewire;
 
-use App\Models\StudentParent;
+use App\Models\Profile;
 use Livewire\Component;
 
 class ParentTable extends Component
@@ -14,12 +14,14 @@ class ParentTable extends Component
     public function render()
     {
         if ($this->search) {
-            $obj = new StudentParent();
-            $parents = $obj->search($obj->query(), $this->search)->paginate($this->paginate);
+            $obj = new Profile();
+            $parents = $obj->search($obj->query(), $this->search)
+                ->where('type', 'parent')
+                ->paginate($this->paginate);
 
             return view('livewire.parent-table', compact('parents'));
         } else {
-            $parents = StudentParent::paginate($this->paginate);
+            $parents = Profile::where('type', 'parent')->paginate($this->paginate);
 
             return view('livewire.parent-table', compact('parents'));
 

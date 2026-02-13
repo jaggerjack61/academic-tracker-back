@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\Admin;
+use App\Models\Profile;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
@@ -21,7 +21,8 @@ class UserSeeder extends Seeder
             'role_id' => 1,
         ]);
 
-        Admin::create([
+        Profile::create([
+            'type' => 'admin',
             'first_name' => 'Admin',
             'last_name' => 'Person',
             'dob' => '1990-01-01',

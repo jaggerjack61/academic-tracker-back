@@ -5,6 +5,7 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -50,23 +51,14 @@ class User extends Authenticatable
         return $this->belongsTo(Role::class);
     }
 
-    /**
-     * @throws \Exception
-     */
-    public function userable($role = null)
+    public function profile(): HasOne
     {
-        return match ($this->role->name ?? $role) {
-            'parent' => $this->belongsTo(StudentParent::class, 'id', 'user_id'),
-            'student' => $this->belongsTo(Student::class, 'id', 'user_id'),
-            'teacher' => $this->belongsTo(Teacher::class, 'id', 'user_id'),
-            'admin' => $this->belongsTo(Admin::class, 'id', 'user_id'),
-            default => throw new \Exception('Invalid role'),
-        };
+        return $this->hasOne(Profile::class, 'user_id', 'id');
     }
 
-    public function parent()
+    public function userable($type = null)
     {
-        return $this->userable('parent');
+        return $this->profile()->when($type, fn ($q) => $q->where('type', $type));
     }
 
     public function student()
@@ -84,30 +76,17 @@ class User extends Authenticatable
         return $this->userable('admin');
     }
 
+    public function parent()
+    {
+        return $this->userable('parent');
+    }
+
     public function search($query, $search)
     {
 
         return $query->where('name', 'LIKE', "%{$search}%")
             ->orWhere('email', 'LIKE', "%{$search}%")
-            ->orWhereHas('student', function ($q) use ($search) {
-                $q->where('id_number', 'LIKE', "%{$search}%")
-                    ->orWhere('phone_number', 'LIKE', "%{$search}%")
-                    ->orWhere('dob', 'LIKE', "%{$search}%")
-                    ->orWhere('sex', 'LIKE', "%{$search}%");
-            })
-            ->orWhereHas('parent', function ($q) use ($search) {
-                $q->where('id_number', 'LIKE', "%{$search}%")
-                    ->orWhere('phone_number', 'LIKE', "%{$search}%")
-                    ->orWhere('dob', 'LIKE', "%{$search}%")
-                    ->orWhere('sex', 'LIKE', "%{$search}%");
-            })
-            ->orWhereHas('teacher', function ($q) use ($search) {
-                $q->where('id_number', 'LIKE', "%{$search}%")
-                    ->orWhere('phone_number', 'LIKE', "%{$search}%")
-                    ->orWhere('dob', 'LIKE', "%{$search}%")
-                    ->orWhere('sex', 'LIKE', "%{$search}%");
-            })
-            ->orWhereHas('admin', function ($q) use ($search) {
+            ->orWhereHas('profile', function ($q) use ($search) {
                 $q->where('id_number', 'LIKE', "%{$search}%")
                     ->orWhere('phone_number', 'LIKE', "%{$search}%")
                     ->orWhere('dob', 'LIKE', "%{$search}%")
