@@ -11,8 +11,9 @@ class GradeController extends Controller
 {
     public function index()
     {
-//        $grades = Grade::where('is_active', true)->get();
+        //        $grades = Grade::where('is_active', true)->get();
         $grades = Grade::all();
+
         return view('pages.settings.grades', compact('grades'));
     }
 
@@ -20,7 +21,7 @@ class GradeController extends Controller
     {
         // Validate the request data
         $validatedData = $request->validate([
-            'name' => 'required|string'
+            'name' => 'required|string',
         ]);
 
         try {
@@ -30,6 +31,7 @@ class GradeController extends Controller
         } catch (\Exception $e) {
             // Log the error message for debugging
             Log::error($e->getMessage());
+
             return back()->with('error', 'Failed to create grade');
         }
     }
@@ -38,14 +40,16 @@ class GradeController extends Controller
     {
         $grade = Grade::find($request->id);
         $validatedData = $request->validate([
-            'name' => 'required|string'
+            'name' => 'required|string',
         ]);
 
         try {
             $grade->update($validatedData);
+
             return back()->with('success', 'Grade has been updated');
         } catch (\Exception $e) {
             Log::error($e->getMessage());
+
             return back()->with('error', 'Failed to update grade');
         }
     }
@@ -54,10 +58,10 @@ class GradeController extends Controller
     {
         $grade = Grade::find($id);
         try {
-            $grade->is_active = !$grade->is_active;
+            $grade->is_active = ! $grade->is_active;
             $grade->save();
-            return back()->with('success', 'Grade status has been updated');
 
+            return back()->with('success', 'Grade status has been updated');
 
         } catch (\Exception $e) {
             return back()->with('error', $e->getMessage());

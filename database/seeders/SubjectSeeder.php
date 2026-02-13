@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use App\Models\Subject;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class SubjectSeeder extends Seeder
@@ -14,16 +13,16 @@ class SubjectSeeder extends Seeder
     public function run(): void
     {
         Subject::create([
-            'name'=> 'Art'
+            'name' => 'Art',
         ]);
         Subject::create([
-            'name'=> 'English'
+            'name' => 'English',
         ]);
         Subject::create([
-            'name'=> 'Mathematics'
+            'name' => 'Mathematics',
         ]);
         Subject::create([
-            'name'=> 'Shona'
+            'name' => 'Shona',
         ]);
     }
 }

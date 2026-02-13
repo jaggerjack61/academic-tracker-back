@@ -7,7 +7,6 @@ use App\Http\Controllers\GradeController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MainController;
 use App\Http\Controllers\ParentController;
-use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\StudentDashboardController;
 use App\Http\Controllers\SubjectController;
@@ -35,9 +34,9 @@ Route::get('/', function () {
 
 Route::get('/logout', function () {
     Auth::logout();
+
     return redirect('/');
 })->name('logout-route');
-
 
 Route::middleware('auth')->group(function () {
     Route::middleware('role:teacher|admin')->group(function () {
@@ -47,10 +46,10 @@ Route::middleware('auth')->group(function () {
         });
 
         Route::controller(ChangePasswordController::class)->group(function () {
-           Route::prefix('change-password')->group(function () {
-               Route::get('/', 'show')->name('show-change-password');
-               Route::post('/', 'change')->name('change-password');
-           });
+            Route::prefix('change-password')->group(function () {
+                Route::get('/', 'show')->name('show-change-password');
+                Route::post('/', 'change')->name('change-password');
+            });
         });
 
         Route::controller(ClassController::class)->group(function () {
@@ -91,8 +90,6 @@ Route::middleware('auth')->group(function () {
         });
     });
 
-
-
     Route::middleware('role:student')->group(function () {
         Route::controller(StudentDashboardController::class)->group(function () {
             Route::prefix('student')->group(function () {
@@ -102,12 +99,7 @@ Route::middleware('auth')->group(function () {
         });
     });
 
-
     Route::middleware('role:admin')->group(function () {
-
-
-
-
 
         Route::controller(TeacherController::class)->group(function () {
             Route::prefix('teachers')->group(function () {
@@ -163,8 +155,6 @@ Route::middleware('auth')->group(function () {
             });
         });
 
-
-
         Route::get('/home', [HomeController::class, 'index'])->name('home');
     });
 
@@ -172,13 +162,11 @@ Route::middleware('auth')->group(function () {
 
 Auth::routes(
     [
-        'login'    => true,
-        'logout'   => true,
+        'login' => true,
+        'logout' => true,
         'register' => false,
-        'reset'    => true,   // for resetting passwords
-        'confirm'  => false,  // for additional password confirmations
-        'verify'   => false,  // for email verification
+        'reset' => true,   // for resetting passwords
+        'confirm' => false,  // for additional password confirmations
+        'verify' => false,  // for email verification
     ]
 );
-
-

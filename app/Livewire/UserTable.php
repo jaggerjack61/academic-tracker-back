@@ -9,19 +9,21 @@ use Livewire\Component;
 class UserTable extends Component
 {
     public $search;
+
     public $paginate = 30;
 
     public function render()
     {
-        if($this->search){
+        if ($this->search) {
             $roles = Role::all();
             $obj = new User();
             $users = $obj->search($obj->query(), $this->search)->paginate($this->paginate);
+
             return view('livewire.user-table', compact('users', 'roles'));
-        }
-        else{
+        } else {
             $roles = Role::all();
             $users = User::paginate($this->paginate);
+
             return view('livewire.user-table', compact('users', 'roles'));
 
         }

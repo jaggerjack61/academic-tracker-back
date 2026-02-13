@@ -12,6 +12,7 @@ class ActivityTypeController extends Controller
     public function index()
     {
         $activityTypes = ActivityType::all();
+
         return view('pages.settings.activity-types', compact('activityTypes'));
     }
 
@@ -19,7 +20,7 @@ class ActivityTypeController extends Controller
     {
         $file = $request->file('file');
         $destinationPath = 'activity_types/files';
-        $fileName = time() . '_' . $file->getClientOriginalName();
+        $fileName = time().'_'.$file->getClientOriginalName();
         $file->move($destinationPath, $fileName);
 
         $validatedData = $request->validate([
@@ -29,7 +30,7 @@ class ActivityTypeController extends Controller
             'true_value' => 'nullable|string',
             'false_value' => 'nullable|string',
         ]);
-        $validatedData['image'] = $destinationPath . '/' . $fileName;
+        $validatedData['image'] = $destinationPath.'/'.$fileName;
 
         try {
             ActivityType::create($validatedData);
@@ -38,6 +39,7 @@ class ActivityTypeController extends Controller
         } catch (\Exception $e) {
             // Log the error message for debugging
             Log::error($e->getMessage());
+
             return back()->with('error', 'Failed to create activity type');
         }
     }
@@ -45,25 +47,25 @@ class ActivityTypeController extends Controller
     public function edit(Request $request)
     {
         try {
-        $validatedData = $request->validate([
-            'name' => 'required|string',
-            'description' => 'nullable|string',
-        ]);
-        $file = $request->file('file');
-        if($file) {
-            $destinationPath = 'activity_types/files';
-            $fileName = time() . '_' . $file->getClientOriginalName();
-            $file->move($destinationPath, $fileName);
-            $validatedData['image'] = $destinationPath . '/' . $fileName;
-        }
-        $activityType = ActivityType::find($request->id);
-
-
+            $validatedData = $request->validate([
+                'name' => 'required|string',
+                'description' => 'nullable|string',
+            ]);
+            $file = $request->file('file');
+            if ($file) {
+                $destinationPath = 'activity_types/files';
+                $fileName = time().'_'.$file->getClientOriginalName();
+                $file->move($destinationPath, $fileName);
+                $validatedData['image'] = $destinationPath.'/'.$fileName;
+            }
+            $activityType = ActivityType::find($request->id);
 
             $activityType->update($validatedData);
+
             return back()->with('success', 'Activity type has been updated');
         } catch (\Exception $e) {
             Log::error($e->getMessage());
+
             return back()->with('error', 'Failed to update activity type'.$e->getMessage());
         }
     }
@@ -72,14 +74,15 @@ class ActivityTypeController extends Controller
     {
         $activityType = ActivityType::find($id);
         try {
-            if($activityType->is_active){
+            if ($activityType->is_active) {
                 $activityType->is_active = false;
                 $activityType->save();
+
                 return back()->with('success', 'Activity type has been deactivated');
-            }
-            else{
+            } else {
                 $activityType->is_active = true;
                 $activityType->save();
+
                 return back()->with('success', 'Activity type has been activated');
             }
 

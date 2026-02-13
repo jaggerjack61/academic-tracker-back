@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Course extends Model
@@ -38,7 +37,7 @@ class Course extends Model
         return $query->where('name', 'LIKE', "%{$search}%")
             ->orWhereHas('teacher', function ($q) use ($search) {
                 $q->where('name', 'LIKE', "%{$search}%")
-                    ->orWhereHas('teacher', function($query) use($search){
+                    ->orWhereHas('teacher', function ($query) use ($search) {
                         $query->where('first_name', 'LIKE', "%{$search}%")->orWhere('last_name', 'LIKE', "%{$search}%");
                     });
             })
@@ -52,8 +51,6 @@ class Course extends Model
 
     public function activities()
     {
-        return $this->hasMany(Activity::class,'course_id','id');
+        return $this->hasMany(Activity::class, 'course_id', 'id');
     }
-
-
 }

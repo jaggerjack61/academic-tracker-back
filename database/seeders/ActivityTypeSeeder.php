@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use App\Models\ActivityType;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class ActivityTypeSeeder extends Seeder
@@ -17,7 +16,7 @@ class ActivityTypeSeeder extends Seeder
             'name' => 'Homework',
             'description' => 'You will have no free time under our care. You are welcome',
             'type' => 'value',
-            'image' => 'asset/img/backgrounds/18.jpg'
+            'image' => 'asset/img/backgrounds/18.jpg',
         ]);
 
         ActivityType::create([
@@ -26,14 +25,14 @@ class ActivityTypeSeeder extends Seeder
             'type' => 'boolean',
             'image' => 'asset/img/backgrounds/18.jpg',
             'true_value' => 'Present',
-            'false_value' => 'Absent'
+            'false_value' => 'Absent',
         ]);
 
         ActivityType::create([
             'name' => 'Study Material',
             'description' => 'I know you are not gonna read these anyway but as your teacher its my job to give these to you.',
             'type' => 'static',
-            'image' => 'asset/img/backgrounds/18.jpg'
+            'image' => 'asset/img/backgrounds/18.jpg',
         ]);
     }
 }

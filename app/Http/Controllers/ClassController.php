@@ -33,14 +33,14 @@ class ClassController extends Controller
         $subjects = Subject::where('is_active', true)->get();
         $teachers = Teacher::where('is_active', true)->get();
         $classes = Course::paginate(30);
-//        $url = $request->path();
+
+        //        $url = $request->path();
         return view('pages.classes.index', compact('grades', 'subjects', 'teachers', 'classes'));
     }
 
     public function create(Request $request)
     {
         // Validate the request data
-
 
         try {
             $validatedData = $request->validate([
@@ -71,6 +71,7 @@ class ClassController extends Controller
         } catch (\Exception $e) {
             // Log the error message for debugging
             Log::error($e->getMessage());
+
             return back()->with('error', 'Failed to create class');
         }
     }
@@ -95,7 +96,7 @@ class ClassController extends Controller
                 $courseTeacher->teacher_id = $validatedData['teacher_id'];
                 $courseTeacher->is_active = true;
                 $courseTeacher->save();
-            } else if ($courseTeacher != null && $validatedData['teacher_id'] != null) {
+            } elseif ($courseTeacher != null && $validatedData['teacher_id'] != null) {
                 if ($courseTeacher->teacher_id != $validatedData['teacher_id']) {
                     $courseTeacher->is_active = false;
                     $courseTeacher->save();
@@ -106,18 +107,21 @@ class ClassController extends Controller
                     $courseTeacher->save();
                 }
             }
+
             return back()->with('success', 'Class has been updated');
         } catch (\Exception $e) {
             // Log the error message for debugging
             Log::error($e->getMessage());
+
             return back()->with('error', 'Failed to update class');
         }
     }
 
     public function toggle(Course $course)
     {
-        $course->is_active = !$course->is_active;
+        $course->is_active = ! $course->is_active;
         $course->save();
+
         return back()->with('success', 'Class status has been updated');
     }
 
@@ -127,18 +131,18 @@ class ClassController extends Controller
             'class' => $course,
             'students' => Student::where('is_active', true)->get(),
             'teachers' => Teacher::where('is_active', true)->get(),
-            'classes' => Course::where('is_active', true)->get()
+            'classes' => Course::where('is_active', true)->get(),
         ]);
     }
 
     public function enroll(Request $request)
     {
-//        dd($request);
+        //        dd($request);
         $class = Course::find($request->course_id);
         foreach ($request->students as $student) {
             $enrolled = $this->studentController->validateEnrollment($student, $class->id);
             if ($enrolled) {
-                if (!$enrolled->is_active) {
+                if (! $enrolled->is_active) {
                     $enrolled->is_active = true;
                     $enrolled->save();
                 }
@@ -149,6 +153,7 @@ class ClassController extends Controller
                 $studentInstance->save();
             }
         }
+
         return back()->with('success', 'Students have been enrolled');
     }
 
@@ -162,7 +167,6 @@ class ClassController extends Controller
             return back()->with('error', $e->getMessage());
         }
 
-
         return back()->with('success', 'Students have been enrolled');
     }
 
@@ -173,20 +177,14 @@ class ClassController extends Controller
 
             $this->iterateEnrolment($request, $currentEnrolledClass);
             $currentEnrolledClass->students()->update(['is_active' => false]);
-//            $currentEnrolledClass->save();
+            //            $currentEnrolledClass->save();
         } catch (\Exception $e) {
             return back()->with('error', $e->getMessage());
         }
 
-
         return back()->with('success', 'Students have been enrolled');
     }
 
-    /**
-     * @param Request $request
-     * @param $currentEnrolledClass
-     * @return void
-     */
     public function iterateEnrolment(Request $request, $currentEnrolledClass): void
     {
         foreach ($request->courses as $course) {
@@ -194,7 +192,7 @@ class ClassController extends Controller
             foreach ($currentEnrolledClass->students as $student) {
                 $enrolled = $this->studentController->validateEnrollment($student->student_id, $class->id);
                 if ($enrolled) {
-                    if (!$enrolled->is_active) {
+                    if (! $enrolled->is_active) {
                         $enrolled->is_active = true;
                         $enrolled->save();
                     }
@@ -214,7 +212,7 @@ class ClassController extends Controller
             'class' => $course,
             'activityTypes' => ActivityType::where('is_active', true)->get(),
             'first' => ActivityType::where('is_active', true)->first()->id,
-            'activities' => Activity::where('course_id', $course->id)->get()
+            'activities' => Activity::where('course_id', $course->id)->get(),
 
         ]);
     }
@@ -224,14 +222,14 @@ class ClassController extends Controller
 
         try {
             $term = $this->getTermForToday();
-            if (!$term) {
+            if (! $term) {
                 return back()->with('error', 'There is currently no active term for your activity. Please go add a new term in your settings.');
             }
 
             $file = $request->file('file');
             if ($file) {
                 $destinationPath = 'class/files';
-                $fileName = time() . '_' . $file->getClientOriginalName();
+                $fileName = time().'_'.$file->getClientOriginalName();
                 $file->move($destinationPath, $fileName);
                 $activity = new Activity();
                 $activity->activity_type_id = $request->activity_type_id;
@@ -242,7 +240,7 @@ class ClassController extends Controller
                 $activity->total = $request->total;
                 $activity->due_date = $request->due_date;
                 $activity->term_id = $term->id;
-                $activity->file = $destinationPath . '/' . $fileName;
+                $activity->file = $destinationPath.'/'.$fileName;
                 $activity->save();
 
             } else {
@@ -274,8 +272,8 @@ class ClassController extends Controller
         }
     }
 
-
-    function getTermForToday() {
+    public function getTermForToday()
+    {
         $today = Carbon::today()->toDateString();
 
         return Term::where('start', '<=', $today)
@@ -322,6 +320,7 @@ class ClassController extends Controller
 
                     $i++;
                 }
+
                 return back()->with('success', 'Activity has been logged');
             } elseif ($activity->type->type == 'boolean') {
                 $studentIds = null;
@@ -393,7 +392,7 @@ class ClassController extends Controller
         }
     }
 
-    public function viewStudentActivities(Student $student,Course $course)
+    public function viewStudentActivities(Student $student, Course $course)
     {
         $logs = ActivityLog::where('student_id', $student->id)
             ->whereHas('activity', function ($query) use ($course) {
@@ -402,9 +401,7 @@ class ClassController extends Controller
             ->get();
         $activityTypes = ActivityType::where('is_active', true)->get();
         $first = ActivityType::where('is_active', true)->first()->id;
-        return view('pages.students.activities', compact( 'student', 'course', 'activityTypes','first'));
+
+        return view('pages.students.activities', compact('student', 'course', 'activityTypes', 'first'));
     }
-
-
 }
-

@@ -40,7 +40,7 @@ class LoginController extends Controller
         if ($user->role && $user->role->name === 'student') {
             return redirect('/student/dashboard');
         }
-        
+
         return redirect($this->redirectTo);
     }
 
@@ -53,5 +53,4 @@ class LoginController extends Controller
     {
         $this->middleware('guest')->except('logout');
     }
-
 }

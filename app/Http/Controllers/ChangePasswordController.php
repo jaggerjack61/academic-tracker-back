@@ -14,28 +14,28 @@ class ChangePasswordController extends Controller
 
     public function change(Request $request)
     {
-        try{
+        try {
             $request->validate([
                 'old_password' => 'required',
                 'password' => 'required',
             ]);
 
-            if($request->password == $request->old_password){
+            if ($request->password == $request->old_password) {
                 return back()->with('error', 'New password cannot be the same as old password');
             }
 
-            if($request->password != $request->confirm_password){
+            if ($request->password != $request->confirm_password) {
                 return back()->with('error', 'Passwords do not match');
             }
 
             $user = auth()->user();
 
-            if (!Hash::check($request->old_password, $user->password)) {
+            if (! Hash::check($request->old_password, $user->password)) {
                 return back()->with('error', 'Old password does not match');
-            }
-            else{
+            } else {
                 $user->password = Hash::make($request->password);
                 $user->save();
+
                 return redirect()->route('show-dashboard')->with('success', 'Password changed successfully');
             }
         } catch (\Exception $e) {

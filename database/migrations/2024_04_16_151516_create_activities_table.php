@@ -18,7 +18,7 @@ return new class extends Migration
             $table->integer('activity_type_id');
             $table->integer('course_id');
             $table->integer('term_id');
-            $table->string('note',4000)->nullable();
+            $table->string('note', 4000)->nullable();
             $table->float('total')->nullable();
             $table->string('due_date')->nullable();
             $table->string('file')->nullable();

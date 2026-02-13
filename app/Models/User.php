@@ -3,10 +3,8 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
-use App\Helpers\AbstractModel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -47,7 +45,7 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
-    public function role():belongsTo
+    public function role(): belongsTo
     {
         return $this->belongsTo(Role::class);
     }
@@ -57,7 +55,7 @@ class User extends Authenticatable
      */
     public function userable($role = null)
     {
-        return match ($this->role->name??$role) {
+        return match ($this->role->name ?? $role) {
             'parent' => $this->belongsTo(StudentParent::class, 'id', 'user_id'),
             'student' => $this->belongsTo(Student::class, 'id', 'user_id'),
             'teacher' => $this->belongsTo(Teacher::class, 'id', 'user_id'),
@@ -85,6 +83,7 @@ class User extends Authenticatable
     {
         return $this->userable('admin');
     }
+
     public function search($query, $search)
     {
 
@@ -118,5 +117,4 @@ class User extends Authenticatable
                 $q->where('name', 'LIKE', "%{$search}%");
             });
     }
-
 }

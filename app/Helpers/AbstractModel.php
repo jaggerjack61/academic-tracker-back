@@ -2,24 +2,21 @@
 
 namespace App\Helpers;
 
-use Illuminate\Database\Eloquent\Factories\Relationship;
-
 class AbstractModel
 {
-
     public function dob()
     {
-        return "";
+        return '';
     }
 
     public function id_number()
     {
-        return "";
+        return '';
     }
 
     public function phone_number()
     {
-        return "";
+        return '';
     }
 
     public function is_active()
@@ -29,6 +26,6 @@ class AbstractModel
 
     public function sex()
     {
-        return "";
+        return '';
     }
 }

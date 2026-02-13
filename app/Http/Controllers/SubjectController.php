@@ -11,8 +11,9 @@ class SubjectController extends Controller
 {
     public function index()
     {
-//        $subjects = Subject::where('is_active', true)->get();
+        //        $subjects = Subject::where('is_active', true)->get();
         $subjects = Subject::all();
+
         return view('pages.settings.subjects', compact('subjects'));
     }
 
@@ -20,7 +21,7 @@ class SubjectController extends Controller
     {
         // Validate the request data
         $validatedData = $request->validate([
-            'name' => 'required|string'
+            'name' => 'required|string',
         ]);
 
         try {
@@ -30,6 +31,7 @@ class SubjectController extends Controller
         } catch (\Exception $e) {
             // Log the error message for debugging
             Log::error($e->getMessage());
+
             return back()->with('error', 'Failed to create subject');
         }
     }
@@ -38,14 +40,16 @@ class SubjectController extends Controller
     {
         $subject = Subject::find($request->id);
         $validatedData = $request->validate([
-            'name' => 'required|string'
+            'name' => 'required|string',
         ]);
 
         try {
             $subject->update($validatedData);
+
             return back()->with('success', 'Subject has been updated');
         } catch (\Exception $e) {
             Log::error($e->getMessage());
+
             return back()->with('error', 'Failed to update subject');
         }
     }
@@ -55,10 +59,10 @@ class SubjectController extends Controller
         $subject = Subject::find($id);
         try {
 
-            $subject->is_active = !$subject->is_active;
+            $subject->is_active = ! $subject->is_active;
             $subject->save();
-            return back()->with('success', 'Subject status has been updated');
 
+            return back()->with('success', 'Subject status has been updated');
 
         } catch (\Exception $e) {
             return back()->with('error', $e->getMessage());

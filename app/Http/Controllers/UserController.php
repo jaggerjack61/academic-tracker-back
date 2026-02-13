@@ -7,7 +7,6 @@ use App\Models\Role;
 use App\Models\Student;
 use App\Models\StudentParent;
 use App\Models\Teacher;
-
 //use App\Models\Parent;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
@@ -32,7 +31,7 @@ class UserController extends Controller
             'id_number' => 'required|string',
             'phone_number' => 'nullable|string',
             'sex' => 'required|string',
-            'role_id' => 'required|integer'
+            'role_id' => 'required|integer',
 
         ]);
 
@@ -41,7 +40,7 @@ class UserController extends Controller
                 'name' => $validatedData['name'],
                 'email' => $validatedData['email'],
                 'role_id' => $validatedData['role_id'],
-                'password' => Hash::make($validatedData['email'])
+                'password' => Hash::make($validatedData['email']),
             ]);
             $user->save();
             $validatedData['user_id'] = $user->id;
@@ -62,6 +61,7 @@ class UserController extends Controller
         } catch (\Exception $e) {
             // Log the error message for debugging
             Log::error($e->getMessage());
+
             return back()->with('error', 'Failed to create user');
         }
     }
@@ -83,31 +83,32 @@ class UserController extends Controller
             $user->update([
                 'name' => $validatedData['name'],
                 'email' => $validatedData['email'],
-                'password' => Hash::make($validatedData['email'])
+                'password' => Hash::make($validatedData['email']),
             ]);
             unset($validatedData['id']);
             $name = $this->splitName($validatedData['name']);
             $validatedData['first_name'] = $name[0];
             $validatedData['last_name'] = $name[1];
             $user->userable->update($validatedData);
+
             return back()->with('success', 'User has been updated');
         } catch (\Exception $e) {
             // Log the error message for debugging
             Log::error($e->getMessage());
+
             return back()->with('error', 'Failed to update user');
         }
     }
-
 
     public function toggle($id): RedirectResponse
     {
 
         try {
             $user = User::find($id);
-            $user->userable->is_active = !$user->userable->is_active;
+            $user->userable->is_active = ! $user->userable->is_active;
             $user->userable->save();
-            return back()->with('success', 'User status has been updated');
 
+            return back()->with('success', 'User status has been updated');
 
         } catch (\Exception $e) {
             return back()->with('error', $e->getMessage());
@@ -135,7 +136,7 @@ class UserController extends Controller
             'sex' => $data['sex'],
             'id_number' => $data['id_number'],
             'phone_number' => $data['phone_number'],
-            'user_id' => $data['user_id']
+            'user_id' => $data['user_id'],
         ]);
     }
 
@@ -150,10 +151,9 @@ class UserController extends Controller
             'sex' => $data['sex'],
             'id_number' => $data['id_number'],
             'phone_number' => $data['phone_number'],
-            'user_id' => $data['user_id']
+            'user_id' => $data['user_id'],
         ]);
     }
-
 
     public function createParent($data)
     {
@@ -166,7 +166,7 @@ class UserController extends Controller
             'sex' => $data['sex'],
             'id_number' => $data['id_number'],
             'phone_number' => $data['phone_number'],
-            'user_id' => $data['user_id']
+            'user_id' => $data['user_id'],
         ]);
     }
 
@@ -181,7 +181,7 @@ class UserController extends Controller
             'sex' => $data['sex'],
             'id_number' => $data['id_number'],
             'phone_number' => $data['phone_number'],
-            'user_id' => $data['user_id']
+            'user_id' => $data['user_id'],
         ]);
     }
 }

@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('first_name');
             $table->string('last_name');
             $table->string('dob');
-            $table->enum('sex',['male','female']);
+            $table->enum('sex', ['male', 'female']);
             $table->string('phone_number')->nullable();
             $table->boolean('is_active')->default(true);
             $table->string('id_number')->unique();

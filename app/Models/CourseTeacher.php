@@ -36,4 +36,3 @@ class CourseTeacher extends Model
         return $this->teacher->name;
     }
 }
-

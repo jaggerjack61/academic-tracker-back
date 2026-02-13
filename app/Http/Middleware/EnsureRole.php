@@ -15,12 +15,13 @@ class EnsureRole
      */
     public function handle(Request $request, Closure $next, string $role): Response
     {
-        $roles =  explode("|", $role);
+        $roles = explode('|', $role);
 
-//        dd($roles,$role);
-        if(!in_array($request->user()->role->name, $roles)) {
-            return response('Your User Role is not authorized to view this page.',403);
+        //        dd($roles,$role);
+        if (! in_array($request->user()->role->name, $roles)) {
+            return response('Your User Role is not authorized to view this page.', 403);
         }
+
         return $next($request);
     }
 }

@@ -11,8 +11,9 @@ class TermController extends Controller
 {
     public function index()
     {
-//        $terms = Term::where('is_active', true)->get();
+        //        $terms = Term::where('is_active', true)->get();
         $terms = Term::all();
+
         return view('pages.settings.terms', compact('terms'));
     }
 
@@ -32,6 +33,7 @@ class TermController extends Controller
         } catch (\Exception $e) {
             // Log the error message for debugging
             Log::error($e->getMessage());
+
             return back()->with('error', 'Failed to create term');
         }
     }
@@ -42,14 +44,16 @@ class TermController extends Controller
         $validatedData = $request->validate([
             'name' => 'required|string',
             'start' => 'required|string',
-            'end' => 'required|string'
+            'end' => 'required|string',
         ]);
 
         try {
             $term->update($validatedData);
+
             return back()->with('success', 'Term has been updated');
         } catch (\Exception $e) {
             Log::error($e->getMessage());
+
             return back()->with('error', 'Failed to update term');
         }
     }
@@ -58,10 +62,10 @@ class TermController extends Controller
     {
         $term = Term::find($id);
         try {
-                $term->is_active = !$term->is_active;
-                $term->save();
-                return back()->with('success', 'Term status has been updated');
+            $term->is_active = ! $term->is_active;
+            $term->save();
 
+            return back()->with('success', 'Term status has been updated');
 
         } catch (\Exception $e) {
             return back()->with('error', $e->getMessage());

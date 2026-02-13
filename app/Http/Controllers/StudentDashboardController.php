@@ -6,7 +6,6 @@ use App\Models\ActivityLog;
 use App\Models\ActivityType;
 use App\Models\Course;
 use App\Models\Student;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class StudentDashboardController extends Controller
@@ -19,7 +18,7 @@ class StudentDashboardController extends Controller
         $user = Auth::user();
         $student = $user->student()->first();
 
-        if (!$student) {
+        if (! $student) {
             return response('Student profile not found.', 404);
         }
 
@@ -37,13 +36,13 @@ class StudentDashboardController extends Controller
         $user = Auth::user();
         $student = $user->student()->first();
 
-        if (!$student) {
+        if (! $student) {
             return response('Student profile not found.', 404);
         }
 
         // Verify student is enrolled in this course
         $enrollment = $student->courses()->where('course_id', $courseId)->first();
-        if (!$enrollment) {
+        if (! $enrollment) {
             return response('You are not enrolled in this class.', 403);
         }
 

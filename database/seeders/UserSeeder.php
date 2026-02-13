@@ -4,7 +4,6 @@ namespace Database\Seeders;
 
 use App\Models\Admin;
 use App\Models\User;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 
@@ -19,7 +18,7 @@ class UserSeeder extends Seeder
             'name' => 'Admin Person',
             'email' => 'admin@example.com',
             'password' => Hash::make('12345'),
-            'role_id' =>  1
+            'role_id' => 1,
         ]);
 
         Admin::create([

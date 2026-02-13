@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Activity extends Model
 {
     use HasFactory;
+
     protected $guarded = ['created_at', 'updated_at'];
 
     public function logs()
@@ -29,5 +30,4 @@ class Activity extends Model
     {
         return $this->hasOne(Course::class, 'id', 'course_id');
     }
-
 }

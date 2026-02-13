@@ -1,316 +1,253 @@
 <!DOCTYPE html>
-<html lang="en">
+<html
+    lang="en"
+    class="light-style layout-menu-fixed"
+    dir="ltr"
+    data-theme="theme-default"
+    data-assets-path="/assets/"
+    data-template="vertical-menu-template-free"
+>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Academic Tracker - Empowering Education Management</title>
-    <meta name="description" content="Academic Tracker is a comprehensive education management platform for schools to track students, teachers, parents, classes, assignments, and grades.">
-    
-    <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="/assets/img/favicon/favicon.ico">
-    
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-    
-    <!-- Icons -->
-    <link rel="stylesheet" href="/assets/vendor/fonts/boxicons.css">
-    
-    <!-- Landing Page CSS -->
-    <link rel="stylesheet" href="/css/landing.css">
+    <meta charset="utf-8" />
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"
+    />
+
+    <title>Academic Tracker</title>
+    <meta
+        name="description"
+        content="Academic Tracker is a comprehensive education management platform for schools to track students, teachers, parents, classes, assignments, and grades."
+    />
+
+    <link rel="icon" type="image/x-icon" href="/assets/img/favicon/favicon.ico" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap"
+        rel="stylesheet"
+    />
+
+    <link rel="stylesheet" href="/assets/vendor/fonts/boxicons.css" />
+
+    <link rel="stylesheet" href="/assets/vendor/css/core.css" class="template-customizer-core-css" />
+    <link rel="stylesheet" href="/assets/vendor/css/theme-default.css" class="template-customizer-theme-css" />
+    <link rel="stylesheet" href="/assets/css/demo.css" />
+
+    <link rel="stylesheet" href="/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" />
+
+    <script src="/assets/vendor/js/helpers.js"></script>
+    <script src="/assets/js/config.js"></script>
 </head>
-<body class="landing-page">
+<body>
+<div class="layout-wrapper layout-content-navbar">
+    <div class="layout-container">
+        <div class="layout-page">
+            <nav
+                class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme mt-3"
+                id="layout-navbar"
+            >
+                <div class="navbar-nav align-items-center">
+                    <a href="{{ route('landing') }}" class="nav-link fw-bold">
+                        <i class="bx bxs-graduation me-2"></i>Academic Tracker
+                    </a>
+                </div>
 
-    <!-- Navigation -->
-    <nav class="landing-nav" id="navbar">
-        <a href="/" class="nav-logo">📚 Academic Tracker</a>
-        <div class="nav-links">
-            <a href="#features" class="nav-link">Features</a>
-            <a href="#how-it-works" class="nav-link">How It Works</a>
-            <a href="#stats" class="nav-link">Statistics</a>
-            <a href="{{ route('login') }}" class="btn-login">Login</a>
-        </div>
-    </nav>
+                <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
+                    <ul class="navbar-nav flex-row align-items-center ms-auto">
+                        <li class="nav-item d-none d-md-block me-3">
+                            <a class="nav-link" href="#features">Features</a>
+                        </li>
+                        <li class="nav-item d-none d-md-block me-3">
+                            <a class="nav-link" href="#how">How It Works</a>
+                        </li>
 
-    <!-- Hero Section with Parallax -->
-    <section class="hero-section" id="hero">
-        <div class="hero-bg" id="parallax-bg"></div>
-        <div class="hero-overlay"></div>
-        
-        <!-- Floating Particles -->
-        <div class="hero-particles">
-            <div class="particle"></div>
-            <div class="particle"></div>
-            <div class="particle"></div>
-            <div class="particle"></div>
-            <div class="particle"></div>
-            <div class="particle"></div>
-            <div class="particle"></div>
-            <div class="particle"></div>
-        </div>
-        
-        <div class="hero-content">
-            <span class="hero-badge">🎓 Modern Education Platform</span>
-            <h1 class="hero-title">Empowering Education Through Smart Tracking</h1>
-            <p class="hero-subtitle">
-                A comprehensive platform for schools to seamlessly manage students, teachers, 
-                parents, classes, assignments, and grades — all in one place.
-            </p>
-            <div class="hero-cta">
-                <a href="{{ route('login') }}" class="btn-primary">Get Started</a>
-                <a href="#features" class="btn-secondary">Learn More</a>
+                        @auth
+                            <li class="nav-item">
+                                <a
+                                    href="{{ Auth::user()->role->name === 'student' ? route('student-dashboard') : route('show-dashboard') }}"
+                                    class="btn btn-primary text-white"
+                                >
+                                    Dashboard
+                                </a>
+                            </li>
+                        @else
+                            <li class="nav-item">
+                                <a href="{{ route('login') }}" class="btn btn-primary text-white">Login</a>
+                            </li>
+                        @endauth
+                    </ul>
+                </div>
+            </nav>
+
+            <div class="content-wrapper">
+                <div class="container-xxl flex-grow-1 container-p-y">
+                    <div class="row">
+                        <div class="col-lg-8 mb-4 order-0">
+                            <div class="card">
+                                <div class="d-flex align-items-end row">
+                                    <div class="col-sm-7">
+                                        <div class="card-body">
+                                            <h5 class="card-title text-primary">Modern school tracking</h5>
+                                            <p class="mb-4">
+                                                Manage students, classes, activity types, and grades in one place with
+                                                role-based dashboards for admins, teachers, parents, and students.
+                                            </p>
+
+                                            <div class="d-flex flex-wrap gap-2">
+                                                @auth
+                                                    <a
+                                                        href="{{ Auth::user()->role->name === 'student' ? route('student-dashboard') : route('show-dashboard') }}"
+                                                        class="btn btn-sm btn-outline-primary"
+                                                    >
+                                                        Open Dashboard
+                                                    </a>
+                                                @else
+                                                    <a href="{{ route('login') }}" class="btn btn-sm btn-outline-primary">Get Started</a>
+                                                @endauth
+                                                <a href="#features" class="btn btn-sm btn-outline-secondary">See Features</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-5 text-center text-sm-left">
+                                        <div class="card-body pb-0 px-0 px-md-4">
+                                            <img
+                                                src="/assets/img/illustrations/man-with-laptop-light.png"
+                                                height="160"
+                                                alt="Academic Tracker"
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-4 col-md-4 order-1">
+                            <div class="card h-100">
+                                <div class="card-body">
+                                    <span class="fw-semibold d-block mb-1">Built for</span>
+                                    <div class="d-flex flex-wrap gap-2">
+                                        <span class="badge bg-label-primary">Admins</span>
+                                        <span class="badge bg-label-info">Teachers</span>
+                                        <span class="badge bg-label-warning">Parents</span>
+                                        <span class="badge bg-label-success">Students</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h5 class="pb-1 mb-4" id="features">Features</h5>
+                    <div class="row">
+                        <div class="col-md-6 col-lg-3 mb-4">
+                            <div class="card h-100">
+                                <div class="card-body">
+                                    <div class="d-flex align-items-center mb-3">
+                                        <div class="avatar flex-shrink-0 me-3">
+                                            <span class="avatar-initial rounded bg-label-primary">
+                                                <i class="bx bx-md bxs-graduation"></i>
+                                            </span>
+                                        </div>
+                                        <h5 class="mb-0">Students</h5>
+                                    </div>
+                                    <p class="mb-0 text-muted">Track profiles, enrollments, and progress in a clean dashboard.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 col-lg-3 mb-4">
+                            <div class="card h-100">
+                                <div class="card-body">
+                                    <div class="d-flex align-items-center mb-3">
+                                        <div class="avatar flex-shrink-0 me-3">
+                                            <span class="avatar-initial rounded bg-label-info">
+                                                <i class="bx bx-md bxs-chalkboard"></i>
+                                            </span>
+                                        </div>
+                                        <h5 class="mb-0">Classes</h5>
+                                    </div>
+                                    <p class="mb-0 text-muted">Organize classes by grade and subject, then manage rosters.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 col-lg-3 mb-4">
+                            <div class="card h-100">
+                                <div class="card-body">
+                                    <div class="d-flex align-items-center mb-3">
+                                        <div class="avatar flex-shrink-0 me-3">
+                                            <span class="avatar-initial rounded bg-label-warning">
+                                                <i class="bx bx-md bxs-spreadsheet"></i>
+                                            </span>
+                                        </div>
+                                        <h5 class="mb-0">Grades</h5>
+                                    </div>
+                                    <p class="mb-0 text-muted">Create activities and record grades with consistent, readable tables.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 col-lg-3 mb-4">
+                            <div class="card h-100">
+                                <div class="card-body">
+                                    <div class="d-flex align-items-center mb-3">
+                                        <div class="avatar flex-shrink-0 me-3">
+                                            <span class="avatar-initial rounded bg-label-success">
+                                                <i class="bx bx-md bxs-user-detail"></i>
+                                            </span>
+                                        </div>
+                                        <h5 class="mb-0">Roles</h5>
+                                    </div>
+                                    <p class="mb-0 text-muted">Role-based access for admins, teachers, parents, and students.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h5 class="pb-1 mb-4" id="how">How It Works</h5>
+                    <div class="row">
+                        <div class="col-md-4 mb-4">
+                            <div class="card h-100">
+                                <div class="card-body">
+                                    <span class="badge bg-label-primary mb-2">Step 1</span>
+                                    <h5>Set up structure</h5>
+                                    <p class="mb-0 text-muted">Configure grades, subjects, terms, and classes.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-4">
+                            <div class="card h-100">
+                                <div class="card-body">
+                                    <span class="badge bg-label-primary mb-2">Step 2</span>
+                                    <h5>Add people</h5>
+                                    <p class="mb-0 text-muted">Create users, then link students with parents and classes.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-4">
+                            <div class="card h-100">
+                                <div class="card-body">
+                                    <span class="badge bg-label-primary mb-2">Step 3</span>
+                                    <h5>Track progress</h5>
+                                    <p class="mb-0 text-muted">Record activities, publish grades, and keep everyone aligned.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="footer m-3">Swole Devs &copy {{now()->format('Y')}}</div>
             </div>
         </div>
-        
-        <div class="scroll-indicator">
-            <span></span>
-        </div>
-    </section>
+    </div>
+</div>
 
-    <!-- Features Section -->
-    <section class="features-section" id="features">
-        <div class="section-header">
-            <span class="section-label">Features</span>
-            <h2 class="section-title">Everything You Need to Manage Education</h2>
-            <p class="section-desc">
-                Our platform provides powerful tools for every stakeholder in the education ecosystem.
-            </p>
-        </div>
-        
-        <div class="features-grid">
-            <div class="feature-card fade-in">
-                <div class="feature-icon student">
-                    <i class='bx bxs-graduation'></i>
-                </div>
-                <h3 class="feature-title">Student Management</h3>
-                <p class="feature-desc">
-                    Track student enrollment, attendance, assignments, and academic progress. 
-                    Students can view their own dashboard with classes and marks.
-                </p>
-            </div>
-            
-            <div class="feature-card fade-in">
-                <div class="feature-icon teacher">
-                    <i class='bx bxs-chalkboard'></i>
-                </div>
-                <h3 class="feature-title">Teacher Portal</h3>
-                <p class="feature-desc">
-                    Empower teachers to manage classes, create activities, grade assignments, 
-                    and track student performance with powerful analytics.
-                </p>
-            </div>
-            
-            <div class="feature-card fade-in">
-                <div class="feature-icon parent">
-                    <i class='bx bxs-user-voice'></i>
-                </div>
-                <h3 class="feature-title">Parent Access</h3>
-                <p class="feature-desc">
-                    Keep parents informed with real-time access to their children's academic 
-                    progress, assignments, and teacher communications.
-                </p>
-            </div>
-            
-            <div class="feature-card fade-in">
-                <div class="feature-icon grade">
-                    <i class='bx bxs-bar-chart-alt-2'></i>
-                </div>
-                <h3 class="feature-title">Grade Tracking</h3>
-                <p class="feature-desc">
-                    Comprehensive grade management with support for multiple terms, subjects, 
-                    activity types, and customizable grading scales.
-                </p>
-            </div>
-        </div>
-    </section>
-
-    <!-- Stats Section with Parallax -->
-    <section class="stats-section" id="stats">
-        <div class="stats-bg"></div>
-        <div class="stats-overlay"></div>
-        
-        <div class="stats-content">
-            <div class="stats-grid">
-                <div class="stat-item fade-in">
-                    <div class="stat-number">1000+</div>
-                    <div class="stat-label">Students</div>
-                </div>
-                <div class="stat-item fade-in">
-                    <div class="stat-number">50+</div>
-                    <div class="stat-label">Teachers</div>
-                </div>
-                <div class="stat-item fade-in">
-                    <div class="stat-number">100+</div>
-                    <div class="stat-label">Classes</div>
-                </div>
-                <div class="stat-item fade-in">
-                    <div class="stat-number">99%</div>
-                    <div class="stat-label">Satisfaction</div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- How It Works Section -->
-    <section class="how-section" id="how-it-works">
-        <div class="section-header">
-            <span class="section-label">How It Works</span>
-            <h2 class="section-title">Simple Steps to Get Started</h2>
-            <p class="section-desc">
-                Get up and running in minutes with our intuitive platform.
-            </p>
-        </div>
-        
-        <div class="steps-container">
-            <div class="step slide-left">
-                <div class="step-number">1</div>
-                <div class="step-content">
-                    <h3 class="step-title">Create Your Account</h3>
-                    <p class="step-desc">
-                        Administrators set up the school account, configure grades, subjects, 
-                        and academic terms to match your institution's needs.
-                    </p>
-                </div>
-            </div>
-            
-            <div class="step slide-right">
-                <div class="step-number">2</div>
-                <div class="step-content">
-                    <h3 class="step-title">Add Users & Classes</h3>
-                    <p class="step-desc">
-                        Register teachers, students, and parents. Create classes and assign 
-                        teachers to manage specific subjects and grades.
-                    </p>
-                </div>
-            </div>
-            
-            <div class="step slide-left">
-                <div class="step-number">3</div>
-                <div class="step-content">
-                    <h3 class="step-title">Track Everything</h3>
-                    <p class="step-desc">
-                        Teachers add activities and grades, students view their progress, 
-                        and parents stay informed — all in real-time.
-                    </p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- CTA Section -->
-    <section class="cta-section">
-        <div class="cta-glow"></div>
-        
-        <div class="cta-content">
-            <h2 class="cta-title">Ready to Transform Your School?</h2>
-            <p class="cta-desc">
-                Join schools already using Academic Tracker to streamline education management.
-            </p>
-            <a href="{{ route('login') }}" class="btn-primary">Login to Your Account</a>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="landing-footer">
-        <p class="footer-text">
-            &copy; {{ date('Y') }} Academic Tracker. Built with ❤️ by 
-            <a href="#">Swole Devs</a>
-        </p>
-    </footer>
-
-    <!-- JavaScript for Parallax & Animations -->
-    <script>
-        // Navbar scroll effect
-        const navbar = document.getElementById('navbar');
-        window.addEventListener('scroll', () => {
-            if (window.scrollY > 50) {
-                navbar.classList.add('scrolled');
-            } else {
-                navbar.classList.remove('scrolled');
-            }
-        });
-
-        // Parallax effect on hero background
-        const parallaxBg = document.getElementById('parallax-bg');
-        window.addEventListener('scroll', () => {
-            const scrolled = window.scrollY;
-            if (parallaxBg) {
-                parallaxBg.style.transform = `translateY(${scrolled * 0.4}px)`;
-            }
-        });
-
-        // Smooth scroll for anchor links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-                }
-            });
-        });
-
-        // Intersection Observer for scroll animations
-        const observerOptions = {
-            root: null,
-            rootMargin: '0px',
-            threshold: 0.1
-        };
-
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
-                }
-            });
-        }, observerOptions);
-
-        // Observe all animated elements
-        document.querySelectorAll('.fade-in, .slide-left, .slide-right').forEach(el => {
-            observer.observe(el);
-        });
-
-        // Counter animation for stats
-        const animateCounter = (element, target) => {
-            let current = 0;
-            const increment = target / 50;
-            const timer = setInterval(() => {
-                current += increment;
-                if (current >= target) {
-                    element.textContent = target + (element.textContent.includes('%') ? '%' : '+');
-                    clearInterval(timer);
-                } else {
-                    element.textContent = Math.floor(current) + (element.textContent.includes('%') ? '%' : '+');
-                }
-            }, 30);
-        };
-
-        // Observe stats section
-        const statsSection = document.getElementById('stats');
-        let statsAnimated = false;
-
-        const statsObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting && !statsAnimated) {
-                    statsAnimated = true;
-                    document.querySelectorAll('.stat-number').forEach(stat => {
-                        const text = stat.textContent;
-                        const number = parseInt(text.replace(/\D/g, ''));
-                        stat.textContent = '0';
-                        animateCounter(stat, number);
-                    });
-                }
-            });
-        }, { threshold: 0.5 });
-
-        if (statsSection) {
-            statsObserver.observe(statsSection);
-        }
-    </script>
-
+<script src="/assets/vendor/libs/jquery/jquery.js"></script>
+<script src="/assets/vendor/libs/popper/popper.js"></script>
+<script src="/assets/vendor/js/bootstrap.js"></script>
+<script src="/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
+<script src="/assets/vendor/js/menu.js"></script>
+<script src="/assets/js/main.js"></script>
 </body>
 </html>
