@@ -17,6 +17,9 @@ public_html/hot
 public/students-files
 public/class
 public/activity_types
+public/activity_types/files/*
+public/class/files/*
+public/students-files/*/uploads/*
 
 storage/*.key
 .env
