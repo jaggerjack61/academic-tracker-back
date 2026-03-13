@@ -1,0 +1,45 @@
+# OS and editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# Logs and caches
+*.log
+*.cache
+
+# Node
+node_modules/
+frontend/node_modules/
+frontend/dist/
+frontend/.vite/
+laravel/node_modules/
+
+# Laravel
+laravel/.env
+laravel/vendor/
+laravel/public/build/
+laravel/storage/*.key
+laravel/storage/logs/*.log
+laravel/storage/framework/cache/data/*
+laravel/storage/framework/sessions/*
+laravel/storage/framework/testing/*
+laravel/storage/framework/views/*
+laravel/bootstrap/cache/*.php
+laravel/bootstrap/cache/packages.php
+laravel/bootstrap/cache/services.php
+laravel/bootstrap/cache/config.php
+laravel/bootstrap/cache/routes-v7.php
+laravel/bootstrap/cache/routes.php
+laravel/bootstrap/cache/events.php
+
+# Test artifacts
+laravel/.phpunit.result.cache
+
+# Build outputs
+coverage/
